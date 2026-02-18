@@ -1,40 +1,204 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Explore</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Explore Moods — DilJourney</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
- <div class="explore-images">
-  <div class="explore-card">
-    <img src="family.jpg" alt="Family">
-    <p>Discover perfect family friendly places offering comfort, safety, memorable moments, and joyful experiences designed for all age groups.</p>
-  </div>
 
-  <div class="explore-card">
-    <img src="Foodie.jpg" alt="Foodie">
-    <p>Explore top foodie destinations featuring authentic flavors, trending cuisines, local delicacies, and unforgettable dining experiences.</p>
-  </div>
-
-  <div class="explore-card">
-    <img src="club.jpg" alt="Club">
-    <p>Experience energetic nightlife with premium clubs, live music, vibrant crowds, stylish ambience, and unforgettable party vibes.</p>
-  </div>
-
-  <div class="explore-card">
-    <img src="nature.jpg" alt="Nature">
-    <p>Relax in peaceful nature spots offering fresh air, scenic landscapes, calming environments, and a perfect escape from city life.</p>
-  </div>
-
-  <div class="explore-card">
-    <img src="romantic.jpg" alt="Romantic">
-    <p>Find romantic destinations ideal for couples with cozy settings, beautiful views, intimate moments, and unforgettable memories.</p>
-  </div>
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" id="mobileClose">✕</button>
+  <a href="index.html#how-it-works">How It Works</a>
+  <a href="index.html#features">Features</a>
+  <a href="Explore.html">Explore</a>
+  <a href="index.html#testimonials">Reviews</a>
+  <a href="account.html" class="btn-primary" style="font-size:1rem; margin-top:10px;">Get Started</a>
 </div>
 
-</body>
-<script src="script.js"></script>
-</html>
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="Explore_component_picture/logo.png" alt="DilJourney Logo" class="nav-logo-img">
+    <span><span class="logo-dil">Dil</span><span class="logo-journey">Journey</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html#how-it-works">How It Works</a></li>
+    <li><a href="index.html#features">Features</a></li>
+    <li><a href="Explore.html">Explore</a></li>
+    <li><a href="index.html#testimonials">Reviews</a></li>
+    <li><a href="account.html" class="nav-cta">Get Started</a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
 
+<section class="mood-showcase">
+  <div class="reveal">
+    <span class="section-tag" style="justify-content:center;">Explore</span>
+    <h2 class="section-title">“Find Your Vibe, Follow Your Dil.”</h2>
+    <p class="section-sub">Whatever you're feeling, there's a perfect place waiting for you. Select a mood to start discovering.</p>
+  </div>
+
+  <div class="mood-showcase-grid">
+    <!-- Existing Moods -->
+    <a href="account.html?form=login" class="mood-card mc-family">
+      <div class="mood-card-bg"></div>
+      <img src="Explore_component_picture/family.jpg" alt="Family outing" loading="lazy" width="350" height="180">
+      <h3 class="mood-card-name">Family</h3>
+      <p class="mood-card-desc">Wholesome places perfect for creating memories with your loved ones, from parks to family-friendly restaurants.</p>
+      <div class="mood-card-tags">
+        <span class="mood-tag">Kid-Friendly</span>
+        <span class="mood-tag">Spacious</span>
+      </div>
+    </a>
+
+    <a href="account.html?form=login" class="mood-card mc-foodie">
+      <div class="mood-card-bg"></div>
+      <img src="Explore_component_picture/foodie.jpg" alt="Gourmet food" loading="lazy" width="350" height="180">
+      <h3 class="mood-card-name">Foodie</h3>
+      <p class="mood-card-desc">Embark on a culinary adventure. Discover top-rated restaurants, hidden gems, and unique gastronomic experiences.</p>
+      <div class="mood-card-tags">
+        <span class="mood-tag">Gourmet</span>
+        <span class="mood-tag">Top Rated</span>
+      </div>
+    </a>
+
+    <a href="account.html?form=login" class="mood-card mc-romantic">
+      <div class="mood-card-bg"></div>
+      <img src="Explore_component_picture/romantic.jpg" alt="Romantic dinner setting" loading="lazy" width="350" height="180">
+      <h3 class="mood-card-name">Romantic</h3>
+      <p class="mood-card-desc">Intimate and charming spots for a perfect date night. Find cozy corners and breathtaking views.</p>
+      <div class="mood-card-tags">
+        <span class="mood-tag">Cozy</span>
+        <span class="mood-tag">Intimate</span>
+      </div>
+    </a>
+
+    <a href="account.html?form=login" class="mood-card mc-nature">
+      <div class="mood-card-bg"></div>
+      <img src="Explore_component_picture/nature.jpg" alt="Serene nature view" loading="lazy" width="350" height="180">
+      <h3 class="mood-card-name">Nature</h3>
+      <p class="mood-card-desc">Escape the city buzz. Find serene parks, beautiful hiking trails, and peaceful gardens to reconnect with nature.</p>
+      <div class="mood-card-tags">
+        <span class="mood-tag">Peaceful</span>
+        <span class="mood-tag">Outdoors</span>
+      </div>
+    </a>
+
+    <a href="account.html?form=login" class="mood-card mc-lonely">
+      <div class="mood-card-bg"></div>
+      <img src="Explore_component_picture/Loniness.jpg" alt="Quiet cafe corner" loading="lazy" width="350" height="180">
+      <h3 class="mood-card-name">Lonely</h3>
+      <p class="mood-card-desc">Comforting and quiet spaces where you can be with your thoughts. Cozy cafes, quiet libraries, and solitary spots.</p>
+      <div class="mood-card-tags">
+        <span class="mood-tag">Quiet</span>
+        <span class="mood-tag">Comforting</span>
+      </div>
+    </a>
+
+    <a href="account.html?form=login" class="mood-card mc-club">
+      <div class="mood-card-bg"></div>
+      <img src="Explore_component_picture/club.jpg" alt="Vibrant nightclub" loading="lazy" width="350" height="180">
+      <h3 class="mood-card-name">Club</h3>
+      <p class="mood-card-desc">Ready to party? Discover the most happening clubs and bars with great music and an energetic vibe.</p>
+      <div class="mood-card-tags">
+        <span class="mood-tag">Energetic</span>
+        <span class="mood-tag">Nightlife</span>
+      </div>
+    </a>
+
+    <a href="account.html?form=login" class="mood-card mc-motivation">
+        <div class="mood-card-bg"></div>
+        <img src="Explore_component_picture/motivation.jpg" alt="Inspiring workspace" loading="lazy" width="350" height="180">
+        <h3 class="mood-card-name">Motivation</h3>
+        <p class="mood-card-desc">Find inspiring environments to get work done, from productive co-working spaces to cafes with a buzz.</p>
+        <div class="mood-card-tags">
+          <span class="mood-tag">Productive</span>
+          <span class="mood-tag">Focused</span>
+        </div>
+      </a>
+
+      <a href="account.html?form=login" class="mood-card mc-movies">
+        <div class="mood-card-bg"></div>
+        <img src="Explore_component_picture/Movie.jpg" alt="Cinema hall" loading="lazy" width="350" height="180">
+        <h3 class="mood-card-name">Movies</h3>
+        <p class="mood-card-desc">Catch the latest blockbusters or an indie gem. Find the best cinemas, from luxury theaters to quirky independents.</p>
+        <div class="mood-card-tags">
+          <span class="mood-tag">Entertainment</span>
+          <span class="mood-tag">Cinema</span>
+        </div>
+      </a>
+
+    <a href="account.html?form=login" class="mood-card mc-library">
+      <div class="mood-card-bg"></div>
+      <img src="Explore_component_picture/library.jpg" alt="Quiet library with books" loading="lazy" width="350" height="180">
+      <h3 class="mood-card-name">Library</h3>
+      <p class="mood-card-desc">Find a quiet and studious atmosphere. Perfect for reading, studying, or just enjoying the silence among books.</p>
+      <div class="mood-card-tags">
+        <span class="mood-tag">Quiet</span>
+        <span class="mood-tag">Studious</span>
+      </div>
+    </a>
+
+    <a href="account.html?form=login" class="mood-card mc-therapy">
+      <div class="mood-card-bg"></div>
+      <img src="Explore_component_picture/tharapy.jpg" alt="Calm and relaxing therapy room" loading="lazy" width="350" height="180">
+      <h3 class="mood-card-name">Therapy</h3>
+      <p class="mood-card-desc">Spaces designed for peace and self-reflection. Find wellness centers, serene spas, and meditation rooms.</p>
+      <div class="mood-card-tags">
+        <span class="mood-tag">Calm</span>
+        <span class="mood-tag">Wellness</span>
+      </div>
+    </a>
+
+    <a href="account.html?form=login" class="mood-card mc-gym">
+      <div class="mood-card-bg"></div>
+      <img src="Explore_component_picture/gym.jpg" alt="Modern gym with equipment" loading="lazy" width="350" height="180">
+      <h3 class="mood-card-name">Gym</h3>
+      <p class="mood-card-desc">Get your body moving. Discover top-rated gyms, fitness studios, and classes to energize your day.</p>
+      <div class="mood-card-tags">
+        <span class="mood-tag">Active</span>
+        <span class="mood-tag">Fitness</span>
+      </div>
+    </a>
+
+    <a href="account.html?form=login" class="mood-card mc-shopping">
+      <div class="mood-card-bg"></div>
+      <img src="Explore_component_picture/Shopping.jpg" alt="People shopping in a modern retail store" loading="lazy" width="350" height="180">
+      <h3 class="mood-card-name">Shopping</h3>
+      <p class="mood-card-desc">Indulge in some retail therapy. Discover everything from high-end boutiques to sprawling malls and unique local shops.</p>
+      <div class="mood-card-tags">
+        <span class="mood-tag">Retail</span>
+        <span class="mood-tag">Fashion</span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+
+
+<footer class="footer-simple">
+  <div class="footer-inner">
+    <div class="footer-bottom">
+      <p>&copy; 2026 DilJourney. All rights reserved.</p>
+      <div class="footer-socials">
+        <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer" class="social-btn">𝕏</a>
+        <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" class="social-btn">in</a>
+        <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" class="social-btn">f</a>
+        <a href="mailto:contact@diljourney.com" class="social-btn">✉</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

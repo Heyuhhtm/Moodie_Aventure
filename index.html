@@ -1,73 +1,293 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Moodie - Discover recommendations that match your current mood.">
-    <title>Moodie | Mood-Based Recommendations</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DilJourney | Find Places That Match Your Vibe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <nav class="navbar">
-    <a href="index.html" </a>
-
-    <ul class="nav-links">
-      <li><a href="Explore.html">Explore</a></li>
-      <li><a href="Treading.html">Trending</a></li>
-    </ul>
-
-    <div class="signin-circle" title="Sign In" role="button" tabindex="0">
-      <span>👤</span>
-    </div>
-  </nav>
 
 
-  <section class="hero" id="home">
-    <video autoplay loop muted playsinline id="bg-video">
-      <!-- You need to provide a video file, e.g., background.mp4 -->
-      <source src="vide.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-    
-    <div class="hero-content">
-      <h1>Recommendations that match your mood</h1>
-      <p>Finding the right place at the right moment can completely change how you feel. 
-        our platform helps you discover places that perfectly match your mood—whether you’re planning a calm
-         family outing, a romantic evening, a foodie 
-        adventure, or a vibrant night out. Let your mood lead the way, and we’ll take care of the rest..</p>
-      <button>Get Started</button>
-    </div>
-
-    <button id="video-control-btn" title="Pause Video">⏸</button>
-  </section>
-
-  <!-- FOOTER -->
-  <footer class="footer">
-    <p>&copy; 2026. All rights reserved.</p>
-    <ul>
-      <li><a href="Explore.html">Explore</a></li>
-      <li><a href="Treading.html">Trending</a></li>
-    </ul>
-  </footer>
-
-  <!-- SIGN IN MODAL -->
-<div class="modal-overlay" id="modal">
-  <div class="modal">
-    <button class="close-btn" id="closeBtn" aria-label="Close" style="background:none;border:none;font-size:1.5rem;cursor:pointer;">&times;</button>
-
-    <h2>Sign In</h2>
-
-    <form action="#" method="POST">
-      <input type="email" name="email" id="email" placeholder="Email" required autocomplete="email" aria-label="Email" />
-      <input type="password" name="password" id="password" placeholder="Password" required autocomplete="current-password" aria-label="Password" />
-      <button type="submit">Login</button>
-    </form>
-
-    <p class="note">Don’t have an account? <a href="#">Sign up</a></p>
-  </div>
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" id="mobileClose">✕</button>
+  <a href="#how-it-works">How It Works</a>
+  <a href="#features">Features</a>
+  <a href="Explore.html">Explore</a>
+  <a href="#testimonials">Reviews</a>
+  <a href="account.html" class="btn-primary" style="font-size:1rem; margin-top:10px;">Get Started</a>
 </div>
 
 
-</body>
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="Explore_component_picture/logo.png" alt="DilJourney Logo" class="nav-logo-img">
+    <span><span class="logo-dil">Dil</span><span class="logo-journey">Journey</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#how-it-works">How It Works</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="Explore.html">Explore</a></li>
+    <li><a href="#testimonials">Reviews</a></li>
+    <li><a href="account.html" class="nav-cta">Get Started</a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+
+<section class="hero">
+  <div class="hero-bg">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <div class="hero-badge">
+    <span class="hero-badge-dot"></span>
+    Your Perfect Place Awaits
+  </div>
+
+  <h1 class="hero-title">
+    Find places that
+    <br/>
+    <span class="line2">match your vibe</span>
+  </h1>
+
+  <p class="hero-sub">
+    DilJourney helps you discover restaurants, cafes, and experiences perfectly matched to your emotional state — transforming every outing into a memorable adventure.
+  </p>
+
+  <div class="hero-actions">
+    <a href="account.html" class="btn-primary">Find Your Vibe →</a>
+    <a href="Explore.html" class="btn-secondary">Explore Moods First</a>
+  </div>
+
+  <div class="mood-preview">
+    <p class="mood-preview-label">What's the mood?</p>
+    <div class="mood-pills">
+      <button class="mood-pill mood-family">👨‍👩‍👧‍👦 Family</button>
+      <button class="mood-pill mood-foodie">🍕 Foodie</button>
+      <button class="mood-pill mood-romantic">💕 Romantic</button>
+      <button class="mood-pill mood-nature">🌿 Nature</button>
+      <button class="mood-pill mood-lonely">😔 Lonely</button>
+      <button class="mood-pill mood-club">🎉 Club</button>
+    </div>
+  </div>
+</section>
+
+
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item reveal">
+      <div class="stat-num">10K+</div>
+      <div class="stat-label">Curated Places</div>
+    </div>
+    <div class="stat-item reveal">
+      <div class="stat-num">500K+</div>
+      <div class="stat-label">Happy Outings</div>
+    </div>
+    <div class="stat-item reveal">
+      <div class="stat-num">25+</div>
+      <div class="stat-label">Cities Covered</div>
+    </div>
+    <div class="stat-item reveal">
+      <div class="stat-num">4.9★</div>
+      <div class="stat-label">User Rating</div>
+    </div>
+  </div>
+</div>
+
+<div id="how-it-works">
+<div class="section">
+  <div class="reveal">
+    <span class="section-tag">How It Works</span>
+    <h2 class="section-title">Three steps to your<br/>perfect outing</h2>
+    <p class="section-sub">No endless scrolling. No decision fatigue. Just pure, mood-matched places that meet you exactly where you are.</p>
+  </div>
+
+  <div class="steps-grid">
+    <div class="step-card reveal">
+      <span class="step-num">01</span>
+      <div class="step-icon step-icon-1">🎭</div>
+      <h3>Select Your Mood</h3>
+      <p>Choose from six vibes. Whether you're planning a big family dinner or need a quiet corner to chill, we've got you covered.</p>
+    </div>
+
+    <div class="step-card reveal" style="transition-delay:0.1s;">
+      <span class="step-num">02</span>
+      <div class="step-icon step-icon-2">✨</div>
+      <h3>Discover Places</h3>
+      <p>Our intelligent engine instantly surfaces restaurants, parks, and venues tailored to your chosen mood and preferences.</p>
+    </div>
+
+    <div class="step-card reveal" style="transition-delay:0.2s;">
+      <span class="step-num">03</span>
+      <div class="step-icon step-icon-3">🚀</div>
+      <h3>Enjoy Your Day</h3>
+      <p>Let the curated experience guide you. Find the perfect spot to uplift, calm, or energize you, and make lasting memories.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<div id="features" class="features-wrapper">
+  <div style="max-width:1200px; margin:0 auto;">
+  <div class="features-grid">
+    <div class="features-text reveal">
+      <span class="section-tag">Features</span>
+      <h2 class="section-title">Built for real<br/>human moments</h2>
+      <p class="section-sub">Every detail of this platform is designed around how people actually feel and how the right place can genuinely enhance an experience.</p>
+      <br/><br/>
+      <a href="account.html" class="btn-primary">Explore All Features →</a>
+    </div>
+
+    <div class="features-cards">
+      <div class="feature-card reveal">
+        <div class="feature-icon fi-1">⭐</div>
+        <div>
+          <h4>Curated Place Listings</h4>
+          <p>Hand-picked locations that perfectly sync with your current emotional wavelength — from cozy cafes to vibrant clubs.</p>
+        </div>
+      </div>
+
+      <div class="feature-card reveal" style="transition-delay:0.1s;">
+        <div class="feature-icon fi-2">💬</div>
+        <div>
+          <h4>Authentic User Reviews</h4>
+          <p>Read reviews from people who visited a place in the same mood, so you know exactly what to expect.</p>
+        </div>
+      </div>
+
+      <div class="feature-card reveal" style="transition-delay:0.2s;">
+        <div class="feature-icon fi-3">🌿</div>
+        <div>
+          <h4>Ambiance Details</h4>
+          <p>Get quick, impactful details on the vibe—lighting, noise level, decor—to ensure it matches your desired state.</p>
+        </div>
+      </div>
+      <div class="feature-card reveal" style="transition-delay:0.3s;">
+        <div class="feature-icon fi-4">🗺️</div>
+        <div>
+          <h4>Smart Filtering</h4>
+          <p>Personalize your search with filters for cuisine, price, and amenities to find the perfect spot right now.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+
+<div id="testimonials" class="testimonials-wrapper">
+  <div class="testimonials-inner">
+    <div class="testimonials-header reveal">
+      <span class="section-tag" style="justify-content:center;">Testimonials</span>
+      <h2 class="section-title">Real people, real moods,<br/>real experiences</h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card reveal">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"I was having a stressful day and just wanted a quiet place. DilJourney found me the perfect cozy cafe I never knew existed. It genuinely gets how environment affects mood."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background:rgba(214,195,181,0.15);">🌙</div>
+          <div>
+            <div class="testimonial-name">Sihu Gupta</div>
+            <div class="testimonial-role">Product Designer</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal" style="transition-delay:0.1s;">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"The 'Romantic' filter is my go-to for date nights. Nothing else even comes close. It's like having a concierge who reads my mind."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background:rgba(214,165,167,0.15);">💕</div>
+          <div>
+            <div class="testimonial-name">Uttam Kumar Gupta</div>
+            <div class="testimonial-role">Software Engineer</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal" style="transition-delay:0.2s;">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"Finally, an app that doesn't just list places, it understands them. When I want a fun family outing, it delivers. DilJourney changed how we explore our city."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background:rgba(233,180,76,0.15);">👨‍👩‍👧‍👦</div>
+          <div>
+            <div class="testimonial-name">Ayush Utkarsh</div>
+            <div class="testimonial-role">Content Creator</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="cta-section">
+  <div class="cta-orb"></div>
+  <div class="cta-inner reveal">
+    <span class="section-tag" style="justify-content:center; margin-bottom:24px;">Ready?</span>
+    <h2 class="cta-title">Your next great experience<br/>starts right here</h2>
+    <p class="cta-sub">Join thousands of users who've discovered the power of mood-matched places. It's free to start and only takes a second.</p>
+    <div class="cta-actions">
+      <a href="account.html" class="btn-primary">Start Your Adventure →</a>
+      <a href="Explore.html" class="btn-secondary">Explore Moods First</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo" style="text-decoration:none;">
+          <img src="Explore_component_picture/logo.png" alt="DilJourney Logo" class="nav-logo-img">
+          DilJourney
+        </a>
+        <p>A mood-based recommendation platform designed to connect people with places that enhance their well-being.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Platform</h5>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="Explore.html">Explore</a></li>
+          <li><a href="#">Pricing</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Legal</h5>
+        <ul>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Cookie Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 DilJourney. All rights reserved.</p>
+      <div class="footer-socials">
+        <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer" class="social-btn">𝕏</a>
+        <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" class="social-btn">in</a>
+        <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" class="social-btn">f</a>
+        <a href="mailto:contact@diljourney.com" class="social-btn">✉</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
 <script src="script.js"></script>
+</body>
 </html>
