@@ -727,6 +727,79 @@ footer {
   padding-top: 0;
 }
 
+/* ABOUT US PAGE */
+.about-section {
+  padding: 0 5% 80px;
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.about-section h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-top: 48px;
+  margin-bottom: 16px;
+  color: var(--text);
+}
+
+.about-section p, .about-section ul {
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1.75;
+  margin-bottom: 1.2em;
+}
+
+.about-section ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.about-section ul li {
+  margin-bottom: 10px;
+}
+
+/* LEGAL/PRIVACY PAGE */
+.legal-section {
+  padding: 0 5% 80px;
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.legal-section h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 40px;
+  margin-bottom: 16px;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+}
+
+.legal-section h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-top: 24px;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+.legal-section p, .legal-section ul {
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.8;
+  margin-bottom: 1.2em;
+}
+
+.legal-section ul {
+  list-style-position: inside;
+  padding-left: 10px;
+}
+
 /* ACCOUNT PAGE */
 .account-page {
   padding: 140px 5% 80px;
@@ -814,7 +887,8 @@ footer {
 }
 
 .form-group input,
-.form-group select {
+.form-group select,
+.form-group textarea {
   width: 100%;
   padding: 12px 16px;
   border-radius: 10px;
@@ -824,10 +898,12 @@ footer {
   font-size: 0.95rem;
   color: var(--text);
   transition: border-color 0.2s, box-shadow 0.2s;
+  resize: vertical;
 }
 
 .form-group input:focus,
-.form-group select:focus {
+.form-group select:focus,
+.form-group textarea:focus {
   outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 3px var(--glow);
@@ -890,6 +966,19 @@ footer {
 }
 .form-switch a:hover {
   text-decoration: underline;
+}
+
+#contact-form-status {
+  margin-top: 16px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+#contact-form-status.success {
+  color: #4DB6AC; /* Green for success */
+}
+#contact-form-status.error {
+  color: #D9534F; /* Red for error */
 }
 
 /* SCROLL REVEAL */

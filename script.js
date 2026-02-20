@@ -36,7 +36,7 @@ if (nav) {
     } else {
       nav.style.transform = 'translateY(0)';
     }
-    lastScroll = current <= 0 ? 0 : current; // Handles elastic scrolling on some devices
+    lastScroll = current <= 0 ? 0 : current;
   });
   nav.style.transition = 'transform 0.35s ease';
 }
@@ -50,7 +50,6 @@ const showForgotBtn = document.getElementById('show-forgot');
 const showLoginFromForgotBtn = document.getElementById('show-login-from-forgot');
 const backBtn = document.getElementById('form-back-btn');
 
-// Password confirmation
 const password = document.getElementById('signup-password');
 const confirmPassword = document.getElementById('signup-confirm-password');
 const passwordError = document.getElementById('password-error');
@@ -64,7 +63,6 @@ if (loginForm && signupForm && forgotForm && showSignupBtn && showLoginBtn && sh
     });
   };
 
-  // Set the initial visible form based on URL parameter
   const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.get('form') === 'login') {
     switchForm(loginForm);
@@ -79,15 +77,11 @@ if (loginForm && signupForm && forgotForm && showSignupBtn && showLoginBtn && sh
 
   backBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    // Determine which form is currently visible and switch accordingly
     if (loginForm.style.display === 'block') {
-      // If login is visible, show signup form
       switchForm(signupForm);
     } else if (forgotForm.style.display === 'block') {
-      // If forgot password is visible, show login form
       switchForm(loginForm);
     } else if (signupForm.style.display === 'block') {
-      // If signup is visible, go to home page
       window.location.href = 'index.html';
     }
   });
@@ -108,4 +102,49 @@ if (loginForm && signupForm && forgotForm && showSignupBtn && showLoginBtn && sh
 
     signupForm.querySelector('form').addEventListener('submit', validatePassword);
   }
+}
+
+// Contact Form Logic with EmailJS
+const contactForm = document.getElementById('contact-form');
+
+if (contactForm) {
+  const statusDiv = document.getElementById('contact-form-status');
+  emailjs.init('XK5pYs1BHTtUTzA5R');
+
+  contactForm.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const submitBtn = contactForm.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = 'Sending...';
+    statusDiv.innerHTML = '';
+    statusDiv.className = '';
+
+    const serviceID = 'service_2t5by0a';
+    const templateID = 'template_qyro8xz';
+
+    emailjs.sendForm(serviceID, templateID, this)
+      .then(() => {
+        submitBtn.innerHTML = 'Message Sent!';
+        statusDiv.innerHTML = 'Thank you! Your message has been sent successfully.';
+        statusDiv.className = 'success';
+        contactForm.reset();
+        setTimeout(() => {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnText;
+          statusDiv.innerHTML = '';
+        }, 5000);
+      }, (err) => {
+        submitBtn.innerHTML = 'Send Failed';
+        statusDiv.innerHTML = 'Sorry, something went wrong. Please try again.';
+        statusDiv.className = 'error';
+        console.error('EmailJS send failed:', err);
+        setTimeout(() => {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnText;
+          statusDiv.innerHTML = '';
+        }, 5000);
+      });
+  });
 }
