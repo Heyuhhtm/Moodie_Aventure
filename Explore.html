@@ -42,15 +42,18 @@
 <section class="mood-showcase">
   <div class="reveal">
     <span class="section-tag" style="justify-content:center;">Explore</span>
-    <h2 class="section-title">“Find Your Vibe, Follow Your Dil.”</h2>
+    <h2 class="section-title">"Find Your Vibe, Follow Your Dil."</h2>
     <p class="section-sub">Whatever you're feeling, there's a perfect place waiting for you. Select a mood to start discovering.</p>
   </div>
 
   <div class="mood-showcase-grid">
-    <!-- Existing Moods -->
+    <!-- Existing Moods - All using lazy loading for better performance -->
     <a href="account.html?form=login" class="mood-card mc-family">
       <div class="mood-card-bg"></div>
-      <img src="Explore_Component_Picture/family.jpg" alt="Family outing" loading="eager" decoding="async" width="350" height="180">
+      <div class="mood-card-img-wrapper">
+        <img src="Explore_Component_Picture/family.jpg" alt="Family outing" loading="lazy" decoding="async" width="350" height="180">
+        <div class="mood-card-img-skeleton"></div>
+      </div>
       <h3 class="mood-card-name">Family</h3>
       <p class="mood-card-desc">Wholesome places perfect for creating memories with your loved ones, from parks to family-friendly restaurants.</p>
       <div class="mood-card-tags">
@@ -60,7 +63,10 @@
     </a>
     <a href="account.html?form=login" class="mood-card mc-foodie">
       <div class="mood-card-bg"></div>
-      <img src="Explore_Component_Picture/Foodie.jpg" alt="Gourmet food" loading="eager" decoding="async" width="350" height="180">
+      <div class="mood-card-img-wrapper">
+        <img src="Explore_Component_Picture/Foodie.jpg" alt="Gourmet food" loading="lazy" decoding="async" width="350" height="180">
+        <div class="mood-card-img-skeleton"></div>
+      </div>
       <h3 class="mood-card-name">Foodie</h3>
       <p class="mood-card-desc">Embark on a culinary adventure. Discover top-rated restaurants, hidden gems, and unique gastronomic experiences.</p>
       <div class="mood-card-tags">
@@ -70,7 +76,10 @@
     </a>
     <a href="account.html?form=login" class="mood-card mc-romantic">
       <div class="mood-card-bg"></div>
-      <img src="Explore_Component_Picture/romantic.jpg" alt="Romantic dinner setting" loading="eager" decoding="async" width="350" height="180">
+      <div class="mood-card-img-wrapper">
+        <img src="Explore_Component_Picture/romantic.jpg" alt="Romantic dinner setting" loading="lazy" decoding="async" width="350" height="180">
+        <div class="mood-card-img-skeleton"></div>
+      </div>
       <h3 class="mood-card-name">Romantic</h3>
       <p class="mood-card-desc">Intimate and charming spots for a perfect date night. Find cozy corners and breathtaking views.</p>
       <div class="mood-card-tags">
@@ -80,7 +89,10 @@
     </a>
     <a href="account.html?form=login" class="mood-card mc-nature">
       <div class="mood-card-bg"></div>
-      <img src="Explore_Component_Picture/nature.jpg" alt="Serene nature view" loading="eager" decoding="async" width="350" height="180">
+      <div class="mood-card-img-wrapper">
+        <img src="Explore_Component_Picture/nature.jpg" alt="Serene nature view" loading="lazy" decoding="async" width="350" height="180">
+        <div class="mood-card-img-skeleton"></div>
+      </div>
       <h3 class="mood-card-name">Nature</h3>
       <p class="mood-card-desc">Escape the city buzz. Find serene parks, beautiful hiking trails, and peaceful gardens to reconnect with nature.</p>
       <div class="mood-card-tags">
@@ -90,7 +102,10 @@
     </a>
     <a href="account.html?form=login" class="mood-card mc-lonely">
       <div class="mood-card-bg"></div>
-      <img src="Explore_Component_Picture/Loniness.jpg" alt="Quiet cafe corner" loading="eager" decoding="async" width="350" height="180">
+      <div class="mood-card-img-wrapper">
+        <img src="Explore_Component_Picture/Loniness.jpg" alt="Quiet cafe corner" loading="lazy" decoding="async" width="350" height="180">
+        <div class="mood-card-img-skeleton"></div>
+      </div>
       <h3 class="mood-card-name">Lonely</h3>
       <p class="mood-card-desc">Comforting and quiet spaces where you can be with your thoughts. Cozy cafes, quiet libraries, and solitary spots.</p>
       <div class="mood-card-tags">
@@ -100,7 +115,10 @@
     </a>
     <a href="account.html?form=login" class="mood-card mc-club">
       <div class="mood-card-bg"></div>
-      <img src="Explore_Component_Picture/club.jpg" alt="Vibrant nightclub" loading="eager" decoding="async" width="350" height="180">
+      <div class="mood-card-img-wrapper">
+        <img src="Explore_Component_Picture/club.jpg" alt="Vibrant nightclub" loading="lazy" decoding="async" width="350" height="180">
+        <div class="mood-card-img-skeleton"></div>
+      </div>
       <h3 class="mood-card-name">Club</h3>
       <p class="mood-card-desc">Ready to party? Discover the most happening clubs and bars with great music and an energetic vibe.</p>
       <div class="mood-card-tags">
@@ -110,7 +128,10 @@
     </a>
     <a href="account.html?form=login" class="mood-card mc-motivation">
         <div class="mood-card-bg"></div>
-        <img src="Explore_Component_Picture/Motivation.jpg" alt="Inspiring workspace" loading="eager" decoding="async" width="350" height="180">
+        <div class="mood-card-img-wrapper">
+          <img src="Explore_Component_Picture/Motivation.jpg" alt="Inspiring workspace" loading="lazy" decoding="async" width="350" height="180">
+          <div class="mood-card-img-skeleton"></div>
+        </div>
         <h3 class="mood-card-name">Motivation</h3>
         <p class="mood-card-desc">Find inspiring environments to get work done, from productive co-working spaces to cafes with a buzz.</p>
         <div class="mood-card-tags">
@@ -120,7 +141,10 @@
     </a>
     <a href="account.html?form=login" class="mood-card mc-movies">
       <div class="mood-card-bg"></div>
-      <img src="Explore_Component_Picture/Movie.jpg" alt="Cinema hall" loading="eager" decoding="async" width="350" height="180">
+      <div class="mood-card-img-wrapper">
+        <img src="Explore_Component_Picture/Movie.jpg" alt="Cinema hall" loading="lazy" decoding="async" width="350" height="180">
+        <div class="mood-card-img-skeleton"></div>
+      </div>
       <h3 class="mood-card-name">Movies</h3>
       <p class="mood-card-desc">Catch the latest blockbusters or an indie gem. Find the best cinemas, from luxury theaters to quirky independents.</p>
       <div class="mood-card-tags">
@@ -130,7 +154,10 @@
     </a>
     <a href="account.html?form=login" class="mood-card mc-library">
       <div class="mood-card-bg"></div>
-      <img src="Explore_Component_Picture/library.jpg" alt="Quiet library with books" loading="eager" decoding="async" width="350" height="180">
+      <div class="mood-card-img-wrapper">
+        <img src="Explore_Component_Picture/library.jpg" alt="Quiet library with books" loading="lazy" decoding="async" width="350" height="180">
+        <div class="mood-card-img-skeleton"></div>
+      </div>
       <h3 class="mood-card-name">Library</h3>
       <p class="mood-card-desc">Find a quiet and studious atmosphere. Perfect for reading, studying, or just enjoying the silence among books.</p>
       <div class="mood-card-tags">
@@ -140,7 +167,10 @@
     </a>
     <a href="account.html?form=login" class="mood-card mc-therapy">
       <div class="mood-card-bg"></div>
-      <img src="Explore_Component_Picture/Tharapy.jpg" alt="Calm and relaxing therapy room" loading="eager" decoding="async" width="350" height="180">
+      <div class="mood-card-img-wrapper">
+        <img src="Explore_Component_Picture/Tharapy.jpg" alt="Calm and relaxing therapy room" loading="lazy" decoding="async" width="350" height="180">
+        <div class="mood-card-img-skeleton"></div>
+      </div>
       <h3 class="mood-card-name">Therapy</h3>
       <p class="mood-card-desc">Spaces designed for peace and self-reflection. Find wellness centers, serene spas, and meditation rooms.</p>
       <div class="mood-card-tags">
@@ -150,7 +180,10 @@
     </a>
     <a href="account.html?form=login" class="mood-card mc-gym">
       <div class="mood-card-bg"></div>
-      <img src="Explore_Component_Picture/gym.jpg" alt="Modern gym with equipment" loading="eager" decoding="async" width="350" height="180">
+      <div class="mood-card-img-wrapper">
+        <img src="Explore_Component_Picture/gym.jpg" alt="Modern gym with equipment" loading="lazy" decoding="async" width="350" height="180">
+        <div class="mood-card-img-skeleton"></div>
+      </div>
       <h3 class="mood-card-name">Gym</h3>
       <p class="mood-card-desc">Get your body moving. Discover top-rated gyms, fitness studios, and classes to energize your day.</p>
       <div class="mood-card-tags">
@@ -160,7 +193,10 @@
     </a>
     <a href="account.html?form=login" class="mood-card mc-shopping">
       <div class="mood-card-bg"></div>
-      <img src="Explore_Component_Picture/Shopping.jpg" alt="People shopping in a modern retail store" loading="eager" decoding="async" width="350" height="180">
+      <div class="mood-card-img-wrapper">
+        <img src="Explore_Component_Picture/Shopping.jpg" alt="People shopping in a modern retail store" loading="lazy" decoding="async" width="350" height="180">
+        <div class="mood-card-img-skeleton"></div>
+      </div>
       <h3 class="mood-card-name">Shopping</h3>
       <p class="mood-card-desc">Indulge in some retail therapy. Discover everything from high-end boutiques to sprawling malls and unique local shops.</p>
       <div class="mood-card-tags">

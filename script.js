@@ -1,7 +1,81 @@
+// Utility function for throttling
+function throttle(func, limit) {
+  let inThrottle;
+  return function(...args) {
+    if (!inThrottle) {
+      func.apply(this, args);
+      inThrottle = true;
+      setTimeout(() => inThrottle = false, limit);
+    }
+  };
+}
+
+// Image lazy loading with smooth fade-in and skeleton handling
+document.addEventListener('DOMContentLoaded', () => {
+  const images = document.querySelectorAll('.mood-card img');
+  
+  // Function to handle image load completion
+  const handleImageLoad = (img) => {
+    img.classList.add('loaded');
+    // Hide the skeleton when image loads
+    const wrapper = img.closest('.mood-card-img-wrapper');
+    if (wrapper) {
+      const skeleton = wrapper.querySelector('.mood-card-img-skeleton');
+      if (skeleton) {
+        skeleton.classList.add('hidden');
+      }
+    }
+  };
+  
+  images.forEach(img => {
+    // If image is already loaded (from cache)
+    if (img.complete && img.naturalWidth !== 0) {
+      handleImageLoad(img);
+    } else {
+      // Wait for image to load
+      img.addEventListener('load', () => handleImageLoad(img));
+      // Handle error case - hide skeleton anyway
+      img.addEventListener('error', () => handleImageLoad(img));
+    }
+  });
+  
+  // IntersectionObserver for images - preload before they come into viewport
+  if ('IntersectionObserver' in window) {
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          // If data-src is set, use it (for progressive loading)
+          if (img.dataset.src) {
+            img.src = img.dataset.src;
+          }
+          // Remove lazy attribute after first observation
+          img.removeAttribute('loading');
+          observer.unobserve(img);
+        }
+      });
+    }, {
+      rootMargin: '100px 0px', // Start loading 100px before visible
+      threshold: 0
+    });
+    
+    images.forEach(img => imageObserver.observe(img));
+  }
+});
+
+// Optimized IntersectionObserver with rootMargin for better lazy loading
 const reveals = document.querySelectorAll('.reveal');
 const obs = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
-}, { threshold: 0.12 });
+  entries.forEach(e => { 
+    if (e.isIntersecting) { 
+      e.target.classList.add('visible'); 
+      obs.unobserve(e.target); 
+    } 
+  });
+}, { 
+  threshold: 0.12,
+  rootMargin: '0px 0px 50px 0px' // Start loading 50px before element is visible
+});
 reveals.forEach(r => obs.observe(r));
 
 const hamburger = document.getElementById('hamburger');
@@ -28,16 +102,23 @@ document.querySelectorAll('.mood-pill').forEach(pill => {
 
 let lastScroll = 0;
 const nav = document.querySelector('nav');
+let navHidden = false;
+
 if (nav) {
-  window.addEventListener('scroll', () => {
+  // Throttled scroll handler - only runs every 100ms max
+  const handleScroll = throttle(() => {
     const current = window.scrollY;
-    if (current > lastScroll && current > 80) {
+    if (current > lastScroll && current > 80 && !navHidden) {
       nav.style.transform = 'translateY(-100%)';
-    } else {
+      navHidden = true;
+    } else if (current <= lastScroll && navHidden) {
       nav.style.transform = 'translateY(0)';
+      navHidden = false;
     }
     lastScroll = current <= 0 ? 0 : current;
-  });
+  }, 100);
+  
+  window.addEventListener('scroll', handleScroll, { passive: true });
   nav.style.transition = 'transform 0.35s ease';
 }
 
