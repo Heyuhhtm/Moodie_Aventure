@@ -1,9 +1,22 @@
 /**
  * DilJourney API Service
  * Centralized API calls to backend
+ * 
+ * For Production: Update the API_BASE_URL to your production backend URL
+ * Example: 'https://your-backend.onrender.com/api'
  */
 
-const API_BASE_URL = 'http://localhost:5000/api';
+// Dynamic API URL based on environment
+// For production, replace with your live backend URL
+const API_BASE_URL = (() => {
+  // Check for window.APP_CONFIG (set by frontend in production)
+  if (typeof window !== 'undefined' && window.APP_CONFIG && window.APP_CONFIG.apiUrl) {
+    return window.APP_CONFIG.apiUrl + '/api';
+  }
+  
+  // Default to localhost for development
+  return 'http://localhost:5000/api';
+})();
 
 class ApiService {
   constructor() {
