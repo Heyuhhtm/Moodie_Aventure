@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us — DilJourney</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css">
+  <!-- EmailJS SDK -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+</head>
+<body>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" id="mobileClose">✕</button>
+  <a href="index.html#how-it-works">How It Works</a>
+  <a href="index.html#features">Features</a>
+  <a href="Explore.html">Explore</a>
+  <a href="index.html#testimonials">Reviews</a>
+  <a href="account.html" class="btn-primary" style="font-size:1rem; margin-top:10px;">Get Started</a>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="Explore_Component_Picture/Logo.png" alt="DilJourney Logo" class="nav-logo-img">
+    <span><span class="logo-dil">Dil</span><span class="logo-journey">Journey</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html#how-it-works">How It Works</a></li>
+    <li><a href="index.html#features">Features</a></li>
+    <li><a href="Explore.html">Explore</a></li>
+    <li><a href="index.html#testimonials">Reviews</a></li>
+    <li><a href="account.html" class="nav-cta">Get Started</a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<main class="account-page">
+  <div class="form-container reveal visible">
+    <h2 class="form-title">Contact Us</h2>
+    <p class="form-sub">Have a question or feedback? We'd love to hear from you.</p>
+    <form id="contact-form">
+      <div class="form-group">
+        <label for="contact-name">Full Name</label>
+        <input type="text" id="contact-name" name="name" required>
+      </div>
+      <div class="form-group">
+        <label for="contact-email">Email Address</label>
+        <input type="email" id="contact-email" name="email" required>
+      </div>
+      <div class="form-group">
+        <label for="contact-message">Message</label>
+        <textarea id="contact-message" name="message" rows="5" required></textarea>
+      </div>
+      <button type="submit" class="btn-primary" style="width:100%; margin-top:10px;">Send Message</button>
+      <div id="contact-form-status"></div>
+    </form>
+  </div>
+</main>
+
+<footer class="footer-simple">
+  <div class="footer-inner">
+    <div class="footer-bottom">
+      <p>&copy; 2026 DilJourney. All rights reserved.</p>
+      <div class="footer-socials">
+        <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer" class="social-btn">𝕏</a>
+        <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" class="social-btn">in</a>
+        <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" class="social-btn">f</a>
+        <a href="https://www.gmail.com" class="social-btn">✉</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

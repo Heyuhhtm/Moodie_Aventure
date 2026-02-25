@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Venues — DilJourney</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Venues Page Specific Styles */
+    .venues-header {
+      padding: 120px 20px 40px;
+      text-align: center;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    }
+
+    .venues-header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3rem;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .venues-header p {
+      color: #aaa;
+      font-size: 1.1rem;
+    }
+
+    .mood-badge {
+      display: inline-block;
+      padding: 8px 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      text-transform: capitalize;
+      margin-top: 15px;
+    }
+
+    .venues-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .venues-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 30px;
+    }
+
+    .venue-card {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .venue-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+
+    .venue-card-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      background: #f0f0f0;
+    }
+
+    .venue-card-content {
+      padding: 20px;
+    }
+
+    .venue-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+
+    .venue-card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin: 0;
+    }
+
+    .venue-card-rating {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: #f59e0b;
+      font-weight: 600;
+    }
+
+    .venue-card-category {
+      display: inline-block;
+      padding: 4px 12px;
+      background: #f3f4f6;
+      color: #6b7280;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      text-transform: capitalize;
+      margin-bottom: 10px;
+    }
+
+    .venue-card-address {
+      color: #9ca3af;
+      font-size: 0.9rem;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .venue-card-moods {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .venue-mood-tag {
+      padding: 4px 10px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 10px;
+      font-size: 0.75rem;
+      text-transform: capitalize;
+    }
+
+    .venue-card-footer {
+      padding: 15px 20px;
+      border-top: 1px solid #f0f0f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .venue-price {
+      font-weight: 700;
+      color: #10b981;
+    }
+
+    .venue-save-btn {
+      padding: 8px 16px;
+      background: transparent;
+      border: 2px solid #667eea;
+      color: #667eea;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+    }
+
+    .venue-save-btn:hover {
+      background: #667eea;
+      color: white;
+    }
+
+    .venue-save-btn.saved {
+      background: #667eea;
+      color: white;
+    }
+
+    .loading-spinner {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 60px;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #667eea;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .no-venues {
+      text-align: center;
+      padding: 60px 20px;
+      color: #6b7280;
+    }
+
+    .no-venues h3 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      color: #1a1a2e;
+    }
+
+    .back-to-explore {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 24px;
+      background: #667eea;
+      color: white;
+      text-decoration: none;
+      border-radius: 25px;
+      transition: background 0.3s ease;
+    }
+
+    .back-to-explore:hover {
+      background: #5a6fd6;
+    }
+
+    .error-message {
+      text-align: center;
+      padding: 40px;
+      color: #dc2626;
+      background: #fef2f2;
+      border-radius: 12px;
+      margin: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" id="mobileClose">✕</button>
+  <a href="index.html#how-it-works">How It Works</a>
+  <a href="index.html#features">Features</a>
+  <a href="Explore.html">Explore</a>
+  <a href="index.html#testimonials">Reviews</a>
+  <a href="account.html" class="btn-primary" style="font-size:1rem; margin-top:10px;">Get Started</a>
+  <a href="#" id="logout-btn-mobile" style="display:none; margin-top:10px;">Logout</a>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="Explore_Component_Picture/Logo.png" alt="DilJourney Logo" class="nav-logo-img">
+    <span><span class="logo-dil">Dil</span><span class="logo-journey">Journey</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html#how-it-works">How It Works</a></li>
+    <li><a href="index.html#features">Features</a></li>
+    <li><a href="Explore.html">Explore</a></li>
+    <li><a href="index.html#testimonials">Reviews</a></li>
+    <li><a href="account.html" class="nav-cta">Get Started</a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Venues Header -->
+<header class="venues-header">
+  <h1 id="page-title">Discover Places</h1>
+  <p id="page-subtitle">Find the perfect venue for your mood</p>
+  <span class="mood-badge" id="current-mood">Loading...</span>
+</header>
+
+<!-- Venues Container -->
+<main class="venues-container">
+  <div id="venues-loading" class="loading-spinner">
+    <div class="spinner"></div>
+  </div>
+  
+  <div id="venues-error" class="error-message" style="display: none;">
+    <h3>Oops! Something went wrong</h3>
+    <p id="error-text">Unable to load venues. Please try again later.</p>
+    <button onclick="loadVenues()" class="back-to-explore">Try Again</button>
+  </div>
+  
+  <div id="venues-grid" class="venues-grid" style="display: none;">
+    <!-- Venue cards will be dynamically inserted here -->
+  </div>
+  
+  <div id="no-venues" class="no-venues" style="display: none;">
+    <h3>No venues found</h3>
+    <p>We couldn't find any venues matching this mood. Try exploring other moods!</p>
+    <a href="Explore.html" class="back-to-explore">Explore Other Moods</a>
+  </div>
+</main>
+
+<footer class="footer-simple">
+  <div class="footer-inner">
+    <div class="footer-bottom">
+      <p>&copy; 2026 DilJourney. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Scripts -->
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  // Get mood from URL parameter
+  const urlParams = new URLSearchParams(window.location.search);
+  const mood = urlParams.get('mood') || 'family';
+
+  // DOM Elements
+  const loadingEl = document.getElementById('venues-loading');
+  const errorEl = document.getElementById('venues-error');
+  const gridEl = document.getElementById('venues-grid');
+  const noVenuesEl = document.getElementById('no-venues');
+  const moodBadgeEl = document.getElementById('current-mood');
+
+  // Initialize
+  document.addEventListener('DOMContentLoaded', () => {
+    updateNavAuth();
+    loadVenues();
+  });
+
+  function updateNavAuth() {
+    const isAuth = window.auth.isAuthenticated();
+    const logoutBtn = document.getElementById('logout-btn-mobile');
+    if (logoutBtn) {
+      logoutBtn.style.display = isAuth ? 'block' : 'none';
+      if (isAuth) {
+        logoutBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          window.auth.logout();
+          window.location.href = 'index.html';
+        });
+      }
+    }
+  }
+
+  async function loadVenues() {
+    // Show loading, hide others
+    loadingEl.style.display = 'flex';
+    errorEl.style.display = 'none';
+    gridEl.style.display = 'none';
+    noVenuesEl.style.display = 'none';
+    
+    // Update page title
+    moodBadgeEl.textContent = mood;
+    document.getElementById('page-title').textContent = getMoodTitle(mood);
+
+    try {
+      const response = await window.apiService.getVenuesByMood(mood);
+      
+      loadingEl.style.display = 'none';
+      
+      // API returns response.venues, not response.data
+      if (response.success && response.venues && response.venues.length > 0) {
+        renderVenues(response.venues);
+        gridEl.style.display = 'grid';
+      } else {
+        noVenuesEl.style.display = 'block';
+      }
+    } catch (error) {
+      console.error('Error loading venues:', error);
+      loadingEl.style.display = 'none';
+      errorEl.style.display = 'block';
+      document.getElementById('error-text').textContent = error.message || 'Failed to load venues';
+    }
+  }
+
+  function getMoodTitle(mood) {
+    const titles = {
+      family: 'Family Fun Places',
+      foodie: 'Foodie Heaven',
+      romantic: 'Romantic Spots',
+      nature: 'Nature Retreats',
+      lonely: 'Quiet Corners',
+      club: 'Nightlife Hotspots',
+      motivation: 'Productive Spaces',
+      movies: 'Cinema & Entertainment',
+      library: 'Libraries & Study',
+      therapy: 'Wellness & Calm',
+      gym: 'Fitness Centers',
+      shopping: 'Shopping Destinations'
+    };
+    return titles[mood] || `${mood} Places`;
+  }
+
+  function renderVenues(venues) {
+    gridEl.innerHTML = venues.map(venue => `
+      <div class="venue-card" onclick="viewVenue('${venue._id}')">
+        <img src="${venue.images && venue.images[0] ? venue.images[0] : 'https://via.placeholder.com/400x200?text=No+Image'}" 
+             alt="${venue.name}" 
+             class="venue-card-image"
+             onerror="this.src='https://via.placeholder.com/400x200?text=No+Image'">
+        <div class="venue-card-content">
+          <div class="venue-card-header">
+            <h3 class="venue-card-title">${venue.name}</h3>
+            <div class="venue-card-rating">
+              <span>★</span>
+              <span>${venue.averageRating ? venue.averageRating.toFixed(1) : '0.0'}</span>
+            </div>
+          </div>
+          <span class="venue-card-category">${venue.category}</span>
+          <div class="venue-card-address">
+            📍 ${venue.address}, ${venue.city}
+          </div>
+          <div class="venue-card-moods">
+            ${venue.moods.map(m => `<span class="venue-mood-tag">${m}</span>`).join('')}
+          </div>
+        </div>
+        <div class="venue-card-footer">
+          <span class="venue-price">${venue.priceRange}</span>
+          <button class="venue-save-btn" onclick="event.stopPropagation(); toggleSaveVenue('${venue._id}', this)">
+            Save
+          </button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function viewVenue(venueId) {
+    // For now, just log the venue ID - can be expanded to show venue details
+    console.log('View venue:', venueId);
+    // Could open a modal or navigate to details page
+  }
+
+  async function toggleSaveVenue(venueId, btn) {
+    if (!window.auth.isAuthenticated()) {
+      window.location.href = 'account.html?form=login';
+      return;
+    }
+
+    try {
+      // This would call the API to save/unsave
+      btn.classList.toggle('saved');
+      btn.textContent = btn.classList.contains('saved') ? 'Saved' : 'Save';
+    } catch (error) {
+      console.error('Error saving venue:', error);
+    }
+  }
+</script>
+</body>
+</html>
