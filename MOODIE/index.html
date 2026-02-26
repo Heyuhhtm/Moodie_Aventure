@@ -45,7 +45,25 @@
     <li><a href="#features">Features</a></li>
     <li><a href="Explore.html">Explore</a></li>
     <li><a href="#testimonials">Reviews</a></li>
-    <li><a href="account.html" class="nav-cta">Get Started</a></li>
+    <li class="nav-cta-guest"><a href="account.html" class="nav-cta">Get Started</a></li>
+    <li class="nav-cta-auth" style="display: none;">
+      <div class="user-menu" id="userMenu">
+        <div class="user-avatar" id="userAvatar">U</div>
+        <span class="user-name" id="userName">User</span>
+        <div class="user-dropdown">
+          <div class="dropdown-header">
+            <div class="dropdown-header-name" id="dropdownName">User Name</div>
+            <div class="dropdown-header-email" id="dropdownEmail">user@email.com</div>
+          </div>
+          <a href="dashboard.html" class="dropdown-item">🏠 Dashboard</a>
+          <a href="profile.html" class="dropdown-item">👤 My Profile</a>
+          <a href="saved-venues.html" class="dropdown-item">🔖 Saved Places</a>
+          <a href="#" class="dropdown-item">⭐ My Reviews</a>
+          <div class="dropdown-divider"></div>
+          <button class="dropdown-item logout" id="logout-btn">↩ Log Out</button>
+        </div>
+      </div>
+    </li>
   </ul>
   <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
     <span></span><span></span><span></span>
@@ -301,6 +319,8 @@
   </div>
 </footer>
 
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
 <script src="script.js"></script>
 </body>
 </html>

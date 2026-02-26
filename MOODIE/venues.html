@@ -434,15 +434,19 @@
 
     try {
       if (isSaved) {
-        await window.apiService.unsaveVenue(venueId);
+        const response = await window.apiService.unsaveVenue(venueId);
         btn.classList.remove('saved');
         btn.textContent = 'Save';
         savedVenueIds.delete(venueId);
+        // Update global user state
+        if (response.user) window.auth.saveUser(localStorage.getItem('token'), response.user);
       } else {
-        await window.apiService.saveVenue(venueId);
+        const response = await window.apiService.saveVenue(venueId);
         btn.classList.add('saved');
         btn.textContent = 'Saved';
         savedVenueIds.add(venueId);
+        // Update global user state
+        if (response.user) window.auth.saveUser(localStorage.getItem('token'), response.user);
       }
     } catch (error) {
       console.error('Error saving venue:', error);

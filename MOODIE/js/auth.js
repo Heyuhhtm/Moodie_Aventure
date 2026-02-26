@@ -58,46 +58,37 @@ function logout() {
 
 // Update UI for authenticated user
 function updateUIForAuthenticatedUser() {
-  // Update nav if user is logged in
-  const navCta = document.querySelector('.nav-cta');
-  if (navCta && currentUser) {
-    navCta.textContent = currentUser.name || 'Account';
-    navCta.href = 'dashboard.html';
-  }
-  
-  // Show logout button if exists
-  const logoutBtn = document.getElementById('logout-btn');
-  if (logoutBtn) {
-    logoutBtn.style.display = 'block';
-  }
-  
-  // Update user menu if exists
-  const userMenu = document.getElementById('userMenu');
-  if (userMenu && currentUser) {
-    const userName = document.getElementById('userName');
-    const userAvatar = document.getElementById('userAvatar');
-    const dropdownName = document.getElementById('dropdownName');
-    const dropdownEmail = document.getElementById('dropdownEmail');
-    
-    if (userName) userName.textContent = currentUser.name ? currentUser.name.split(' ')[0] : 'User';
-    if (userAvatar) userAvatar.textContent = currentUser.name ? currentUser.name.charAt(0).toUpperCase() : 'U';
-    if (dropdownName) dropdownName.textContent = currentUser.name || 'User';
-    if (dropdownEmail) dropdownEmail.textContent = currentUser.email || 'user@email.com';
+  const guestNav = document.querySelector('.nav-cta-guest');
+  const authNav = document.querySelector('.nav-cta-auth');
+
+  if (guestNav) guestNav.style.display = 'none';
+  if (authNav) authNav.style.display = 'list-item'; // Use list-item for correct layout
+
+  // Update user-specific elements if they exist
+  if (currentUser) {
+    const userMenu = document.getElementById('userMenu');
+    if (userMenu) {
+      const userName = document.getElementById('userName');
+      const userAvatar = document.getElementById('userAvatar');
+      const dropdownName = document.getElementById('dropdownName');
+      const dropdownEmail = document.getElementById('dropdownEmail');
+      
+      const firstName = currentUser.name ? currentUser.name.split(' ')[0] : 'User';
+      if (userName) userName.textContent = firstName;
+      if (userAvatar) userAvatar.textContent = currentUser.name ? currentUser.name.charAt(0).toUpperCase() : 'U';
+      if (dropdownName) dropdownName.textContent = currentUser.name || 'User';
+      if (dropdownEmail) dropdownEmail.textContent = currentUser.email || 'user@email.com';
+    }
   }
 }
 
 // Update UI for guest user
 function updateUIForGuestUser() {
-  const navCta = document.querySelector('.nav-cta');
-  if (navCta) {
-    navCta.textContent = 'Get Started';
-    navCta.href = 'account.html';
-  }
-  
-  const logoutBtn = document.getElementById('logout-btn');
-  if (logoutBtn) {
-    logoutBtn.style.display = 'none';
-  }
+  const guestNav = document.querySelector('.nav-cta-guest');
+  const authNav = document.querySelector('.nav-cta-auth');
+
+  if (guestNav) guestNav.style.display = 'list-item';
+  if (authNav) authNav.style.display = 'none';
 }
 
 // Check if user is authenticated

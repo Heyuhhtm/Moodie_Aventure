@@ -8,14 +8,23 @@ const Review = require('../models/Review');
 // ─────────────────────────────────────────────────────────────────
 exports.updateProfile = async (req, res) => {
   try {
-    const { name, bio, city, avatar, favoriteMoods } = req.body;
+    const { name, bio, city, avatar, favoriteMoods, age, gender, primaryMood, preferences } = req.body;
 
     const updatedFields = {};
     if (name)          updatedFields.name = name;
     if (bio !== undefined) updatedFields.bio = bio;
     if (city !== undefined) updatedFields.city = city;
     if (avatar)        updatedFields.avatar = avatar;
-    if (favoriteMoods) updatedFields.favoriteMoods = favoriteMoods;
+
+    // If primaryMood is sent, it overwrites favoriteMoods (consistent with onboarding)
+    if (primaryMood) {
+      updatedFields.favoriteMoods = [primaryMood];
+    } else if (favoriteMoods) {
+      updatedFields.favoriteMoods = favoriteMoods;
+    }
+    if (age) updatedFields.age = parseInt(age);
+    if (gender) updatedFields.gender = gender;
+    if (preferences) updatedFields.preferences = preferences;
 
     const user = await User.findByIdAndUpdate(
       req.user.id,
@@ -82,9 +91,14 @@ exports.changePassword = async (req, res) => {
 // ─────────────────────────────────────────────────────────────────
 exports.saveVenue = async (req, res) => {
   try {
+    const { venueId } = req.body;
+    if (!venueId) {
+      return res.status(400).json({ success: false, message: 'Venue ID is required.' });
+    }
+
     const user = await User.findById(req.user.id);
 
-    const alreadySaved = user.savedVenues.includes(req.params.venueId);
+    const alreadySaved = user.savedVenues.includes(venueId);
     if (alreadySaved) {
       return res.status(400).json({
         success: false,
@@ -92,14 +106,13 @@ exports.saveVenue = async (req, res) => {
       });
     }
 
-    user.savedVenues.push(req.params.venueId);
-    await user.save();
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user.id,
+      { $addToSet: { savedVenues: venueId } }, // Use $addToSet to prevent duplicates
+      { new: true, runValidators: true }
+    ).populate('savedVenues', 'name category city moods averageRating');
 
-    res.status(200).json({
-      success: true,
-      message: 'Venue saved successfully.',
-      savedVenues: user.savedVenues,
-    });
+    res.status(200).json({ success: true, message: 'Venue saved.', user: updatedUser });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Server error.' });
   }
@@ -112,18 +125,16 @@ exports.saveVenue = async (req, res) => {
 // ─────────────────────────────────────────────────────────────────
 exports.removeSavedVenue = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id);
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user.id,
+      { $pull: { savedVenues: req.params.venueId } },
+      { new: true }
+    ).populate('savedVenues', 'name category city moods averageRating');
 
-    user.savedVenues = user.savedVenues.filter(
-      (id) => id.toString() !== req.params.venueId
-    );
-    await user.save();
-
-    res.status(200).json({
-      success: true,
-      message: 'Venue removed from saved.',
-      savedVenues: user.savedVenues,
-    });
+    if (!updatedUser) {
+      return res.status(404).json({ success: false, message: 'User not found.' });
+    }
+    res.status(200).json({ success: true, message: 'Venue unsaved.', user: updatedUser });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Server error.' });
   }
