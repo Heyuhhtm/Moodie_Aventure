@@ -55,6 +55,11 @@ class ApiService {
   // Generic request handler
   async request(endpoint, options = {}) {
     const url = `${this.baseUrl}${endpoint}`;
+    console.log('=== API REQUEST ===');
+    console.log('URL:', url);
+    console.log('Method:', options.method || 'GET');
+    console.log('Body:', options.body);
+    
     const config = {
       ...options,
       headers: {
@@ -62,10 +67,16 @@ class ApiService {
         ...options.headers,
       },
     };
+    
+    console.log('Headers:', config.headers);
 
     try {
+      console.log('Sending request...');
       const response = await fetch(url, config);
+      console.log('Response status:', response.status);
+      
       const data = await response.json();
+      console.log('Response data:', data);
 
       if (!response.ok) {
         throw new Error(data.message || 'Something went wrong');

@@ -120,8 +120,11 @@ function setupAuthForms() {
 async function handleLogin(e) {
   e.preventDefault();
   
+  console.log('=== FRONTEND: Login form submitted ===');
   const email = document.getElementById('login-email')?.value;
   const password = document.getElementById('login-password')?.value;
+  
+  console.log('Login credentials:', { email, password: password ? '***' : 'empty' });
 
   if (!email || !password) {
     showFormMessage('login-form', 'Please fill in all fields', 'error');
@@ -130,8 +133,10 @@ async function handleLogin(e) {
 
   try {
     setFormLoading('login-form', true);
+    console.log('Calling API login endpoint...');
     
     const response = await window.apiService.login({ email, password });
+    console.log('API Response:', response);
     
     if (response.success) {
       saveUser(response.token, response.user);
@@ -142,6 +147,7 @@ async function handleLogin(e) {
       }, 1000);
     }
   } catch (error) {
+    console.error('Login error:', error);
     showFormMessage('login-form', error.message || 'Login failed', 'error');
   } finally {
     setFormLoading('login-form', false);
@@ -152,6 +158,7 @@ async function handleLogin(e) {
 async function handleSignup(e) {
   e.preventDefault();
   
+  console.log('=== FRONTEND: Signup form submitted ===');
   const name = document.getElementById('signup-name')?.value;
   const email = document.getElementById('signup-email')?.value;
   const password = document.getElementById('signup-password')?.value;
@@ -166,6 +173,8 @@ async function handleSignup(e) {
   // Get selected preferences
   const preferenceEls = document.querySelectorAll('input[name="preferences"]:checked');
   const preferences = Array.from(preferenceEls).map(el => el.value);
+
+  console.log('Signup data:', { name, email, password: password ? '***' : 'empty', age, gender, primaryMood, preferences });
 
   if (!name || !email || !password || !confirmPassword) {
     showFormMessage('signup-form', 'Please fill in all fields', 'error');
@@ -184,6 +193,7 @@ async function handleSignup(e) {
 
   try {
     setFormLoading('signup-form', true);
+    console.log('Calling API register endpoint...');
     
     // Build user data object with all fields
     const userData = { name, email, password };
@@ -194,7 +204,9 @@ async function handleSignup(e) {
     if (primaryMood) userData.primaryMood = primaryMood;
     if (preferences.length > 0) userData.preferences = preferences;
     
+    console.log('Sending registration data:', userData);
     const response = await window.apiService.register(userData);
+    console.log('API Response:', response);
     
     if (response.success) {
       saveUser(response.token, response.user);
@@ -205,6 +217,7 @@ async function handleSignup(e) {
       }, 1000);
     }
   } catch (error) {
+    console.error('Signup error:', error);
     showFormMessage('signup-form', error.message || 'Registration failed', 'error');
   } finally {
     setFormLoading('signup-form', false);

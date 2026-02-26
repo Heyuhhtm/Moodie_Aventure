@@ -6,6 +6,15 @@ const connectDB = require('./config/db');
 // Load env vars
 dotenv.config();
 
+// Debug: Log environment variables status
+console.log('=== ENVIRONMENT VARIABLES CHECK ===');
+console.log('MONGO_URI:', process.env.MONGO_URI ? '✓ Set' : '✗ NOT SET');
+console.log('JWT_SECRET:', process.env.JWT_SECRET ? '✓ Set' : '✗ NOT SET');
+console.log('JWT_EXPIRES_IN:', process.env.JWT_EXPIRES_IN || '✓ Default (7d)');
+console.log('PORT:', process.env.PORT || '✓ Default (5000)');
+console.log('CLIENT_URL:', process.env.CLIENT_URL || '✓ Default (*)');
+console.log('=====================================');
+
 // Connect to MongoDB
 connectDB();
 
@@ -13,7 +22,7 @@ const app = express();
 
 // ─── Middleware ───────────────────────────────────
 app.use(cors({
-  origin: process.env.CLIENT_URL || '*',
+  origin: ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5500', 'http://127.0.0.1:5500'],
   credentials: true,
 }));
 app.use(express.json());
