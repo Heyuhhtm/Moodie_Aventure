@@ -67,17 +67,6 @@ app.get('/', (req, res) => {
   });
 });
 
-// ─── Serve Static Frontend in Production ─────────
-if (process.env.NODE_ENV === 'production') {
-  // Serve static files from MOODIE folder
-  app.use(express.static(path.join(__dirname, '../MOODIE')));
-
-  // Handle SPA routing - serve index.html for all non-API routes
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../MOODIE/index.html'));
-  });
-}
-
 // ─── 404 Handler ──────────────────────────────────
 app.use((req, res) => {
   res.status(404).json({ success: false, message: 'Route not found' });
