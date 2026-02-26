@@ -8,6 +8,165 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* Enhanced Account Page Styles */
+    .form-container {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .form-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s;
+    }
+    
+    .form-container.loading::before {
+      left: 100%;
+    }
+
+    /* Form section transitions */
+    .form-section {
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    
+    .form-section.hidden {
+      display: none;
+    }
+    
+    .form-section.active {
+      display: block;
+      animation: fadeIn 0.4s ease forwards;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Success animation */
+    .success-overlay {
+      position: absolute;
+      inset: 0;
+      background: var(--surface);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+      z-index: 10;
+    }
+    
+    .success-overlay.show {
+      opacity: 1;
+      pointer-events: all;
+    }
+    
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), #c99a71);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      color: white;
+      margin-bottom: 20px;
+      animation: scaleIn 0.5s ease forwards;
+    }
+    
+    @keyframes scaleIn {
+      from { transform: scale(0); }
+      to { transform: scale(1); }
+    }
+    
+    .success-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    
+    .success-subtext {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    
+    /* Loading spinner */
+    .btn-loading {
+      position: relative;
+      pointer-events: none;
+    }
+    
+    .btn-loading::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      top: 50%;
+      left: 50%;
+      margin-left: -10px;
+      margin-top: -10px;
+      border: 2px solid transparent;
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Form input improvements */
+    .form-group input:focus,
+    .form-group select:focus {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(166, 124, 82, 0.15);
+    }
+
+    /* Choice labels hover effect */
+    .choice-label {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .choice-label::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--accent), #c99a71);
+      opacity: 0;
+      transition: opacity 0.2s;
+      z-index: -1;
+    }
+    
+    .choice-input:checked + .choice-label {
+      color: white;
+    }
+    
+    .choice-input:checked + .choice-label::after {
+      opacity: 1;
+    }
+
+    /* Form message animation */
+    .form-message {
+      animation: slideIn 0.3s ease;
+    }
+    
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
 <body>
 
@@ -40,6 +199,12 @@
 
 <main class="account-page">
   <div class="form-container reveal visible">
+    <!-- Success Overlay -->
+    <div class="success-overlay" id="successOverlay">
+      <div class="success-icon">✓</div>
+      <div class="success-text" id="successText">Welcome back!</div>
+      <div class="success-subtext" id="successSubtext">Redirecting to your dashboard...</div>
+    </div>
     <a href="#" id="form-back-btn" class="form-back-link" aria-label="Go back">←</a>
     <!-- Login Form -->
     <div id="login-form" class="form-section" style="display: none;">
@@ -95,55 +260,6 @@
           <label for="signup-confirm-password">Confirm Password</label>
           <input type="password" id="signup-confirm-password" required>
           <small id="password-error" style="color: red; display: none;">Passwords do not match.</small>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label for="signup-age">Age</label>
-            <input type="number" id="signup-age" min="13">
-          </div>
-          <div class="form-group">
-            <label for="signup-gender">Gender</label>
-            <select id="signup-gender">
-              <option value="">Select...</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="non-binary">Non-binary</option>
-              <option value="other">Other</option>
-              <option value="prefer-not-to-say">Prefer not to say</option>
-            </select>
-          </div>
-        </div>
-        
-        <div class="form-group">
-          <label>Select Your Primary Mood</label>
-          <div class="choice-group">
-            <input type="radio" id="mood-happy" name="primary-mood" value="happy" class="choice-input">
-            <label for="mood-happy" class="choice-label">😊 Happy</label>
-            <input type="radio" id="mood-sad" name="primary-mood" value="sad" class="choice-input">
-            <label for="mood-sad" class="choice-label">😔 Sad</label>
-            <input type="radio" id="mood-romantic" name="primary-mood" value="romantic" class="choice-input">
-            <label for="mood-romantic" class="choice-label">💕 Romantic</label>
-            <input type="radio" id="mood-motivated" name="primary-mood" value="motivated" class="choice-input">
-            <label for="mood-motivated" class="choice-label">💪 Motivated</label>
-            <input type="radio" id="mood-chill" name="primary-mood" value="chill" class="choice-input">
-            <label for="mood-chill" class="choice-label">🧘 Chill</label>
-            <input type="radio" id="mood-party" name="primary-mood" value="party" class="choice-input">
-            <label for="mood-party" class="choice-label">🎉 Party</label>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>Content Preferences</label>
-          <div class="choice-group">
-            <input type="checkbox" id="pref-music" name="preferences" value="music" class="choice-input">
-            <label for="pref-music" class="choice-label">🎵 Music</label>
-            <input type="checkbox" id="pref-quotes" name="preferences" value="quotes" class="choice-input">
-            <label for="pref-quotes" class="choice-label">❝ Quotes</label>
-            <input type="checkbox" id="pref-videos" name="preferences" value="videos" class="choice-input">
-            <label for="pref-videos" class="choice-label">🎬 Videos</label>
-            <input type="checkbox" id="pref-activities" name="preferences" value="activities" class="choice-input">
-            <label for="pref-activities" class="choice-label">🤸 Activities</label>
-          </div>
         </div>
 
         <button type="submit" class="btn-primary" style="width:100%; margin-top:10px;">Create Account</button>

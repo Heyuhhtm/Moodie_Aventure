@@ -298,6 +298,7 @@
 <script src="js/config.js"></script>
 <script src="js/api.js"></script>
 <script src="js/auth.js"></script>
+<script src="script.js"></script>
 <script>
   // Get mood from URL parameter
   const urlParams = new URLSearchParams(window.location.search);
@@ -310,26 +311,25 @@
   const noVenuesEl = document.getElementById('no-venues');
   const moodBadgeEl = document.getElementById('current-mood');
 
+  let savedVenueIds = new Set();
+
   // Initialize
   document.addEventListener('DOMContentLoaded', () => {
-    updateNavAuth();
+    // Protect this page: redirect to login if not authenticated.
+    if (!window.auth || !window.auth.isAuthenticated()) {
+      // Save the intended destination to redirect back after login.
+      const returnUrl = window.location.pathname + window.location.search;
+      window.location.href = `account.html?form=login&returnUrl=${encodeURIComponent(returnUrl)}`;
+      return; // Stop further execution.
+    }
+
+    const user = window.auth.getCurrentUser();
+    if (user && user.savedVenues) {
+      savedVenueIds = new Set(user.savedVenues.map(v => v._id));
+    }
+
     loadVenues();
   });
-
-  function updateNavAuth() {
-    const isAuth = window.auth.isAuthenticated();
-    const logoutBtn = document.getElementById('logout-btn-mobile');
-    if (logoutBtn) {
-      logoutBtn.style.display = isAuth ? 'block' : 'none';
-      if (isAuth) {
-        logoutBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          window.auth.logout();
-          window.location.href = 'index.html';
-        });
-      }
-    }
-  }
 
   async function loadVenues() {
     // Show loading, hide others
@@ -349,7 +349,7 @@
       
       // API returns response.venues, not response.data
       if (response.success && response.venues && response.venues.length > 0) {
-        renderVenues(response.venues);
+        renderVenues(response.venues, savedVenueIds);
         gridEl.style.display = 'grid';
       } else {
         noVenuesEl.style.display = 'block';
@@ -380,8 +380,10 @@
     return titles[mood] || `${mood} Places`;
   }
 
-  function renderVenues(venues) {
-    gridEl.innerHTML = venues.map(venue => `
+  function renderVenues(venues, savedIds) {
+    gridEl.innerHTML = venues.map(venue => {
+      const isSaved = savedIds.has(venue._id);
+      return `
       <div class="venue-card" onclick="viewVenue('${venue._id}')">
         <img src="${venue.images && venue.images[0] ? venue.images[0] : 'https://via.placeholder.com/400x200?text=No+Image'}" 
              alt="${venue.name}" 
@@ -405,12 +407,13 @@
         </div>
         <div class="venue-card-footer">
           <span class="venue-price">${venue.priceRange}</span>
-          <button class="venue-save-btn" onclick="event.stopPropagation(); toggleSaveVenue('${venue._id}', this)">
-            Save
+          <button class="venue-save-btn ${isSaved ? 'saved' : ''}" onclick="event.stopPropagation(); toggleSaveVenue('${venue._id}', this)">
+            ${isSaved ? 'Saved' : 'Save'}
           </button>
         </div>
       </div>
-    `).join('');
+      `;
+    }).join('');
   }
 
   function viewVenue(venueId) {
@@ -425,12 +428,28 @@
       return;
     }
 
+    const isSaved = btn.classList.contains('saved');
+    btn.disabled = true;
+    btn.textContent = '...';
+
     try {
-      // This would call the API to save/unsave
-      btn.classList.toggle('saved');
-      btn.textContent = btn.classList.contains('saved') ? 'Saved' : 'Save';
+      if (isSaved) {
+        await window.apiService.unsaveVenue(venueId);
+        btn.classList.remove('saved');
+        btn.textContent = 'Save';
+        savedVenueIds.delete(venueId);
+      } else {
+        await window.apiService.saveVenue(venueId);
+        btn.classList.add('saved');
+        btn.textContent = 'Saved';
+        savedVenueIds.add(venueId);
+      }
     } catch (error) {
       console.error('Error saving venue:', error);
+      // Revert on error
+      btn.textContent = isSaved ? 'Saved' : 'Save';
+    } finally {
+      btn.disabled = false;
     }
   }
 </script>

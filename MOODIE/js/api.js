@@ -6,17 +6,9 @@
  * Example: 'https://your-backend.onrender.com/api'
  */
 
-// Dynamic API URL based on environment
-// For production, replace with your live backend URL
-const API_BASE_URL = (() => {
-  // Check for window.APP_CONFIG (set by frontend in production)
-  if (typeof window !== 'undefined' && window.APP_CONFIG && window.APP_CONFIG.apiUrl) {
-    return window.APP_CONFIG.apiUrl + '/api';
-  }
-  
-  // Default to localhost for development
-  return 'http://localhost:5000/api';
-})();
+// Base URL is derived from config.js or defaults to localhost for development.
+const API_BASE_URL = (window.APP_CONFIG?.apiUrl || 'http://localhost:5000') + '/api';
+const IS_DEVELOPMENT = !window.APP_CONFIG?.apiUrl;
 
 class ApiService {
   constructor() {
@@ -55,11 +47,12 @@ class ApiService {
   // Generic request handler
   async request(endpoint, options = {}) {
     const url = `${this.baseUrl}${endpoint}`;
-    console.log('=== API REQUEST ===');
-    console.log('URL:', url);
-    console.log('Method:', options.method || 'GET');
-    console.log('Body:', options.body);
-    
+    if (IS_DEVELOPMENT) {
+      console.log('=== API REQUEST ===');
+      console.log('URL:', url);
+      console.log('Method:', options.method || 'GET');
+      console.log('Body:', options.body);
+    }
     const config = {
       ...options,
       headers: {
@@ -67,16 +60,19 @@ class ApiService {
         ...options.headers,
       },
     };
-    
-    console.log('Headers:', config.headers);
+    if (IS_DEVELOPMENT) {
+      console.log('Headers:', config.headers);
+    }
 
     try {
-      console.log('Sending request...');
+      if (IS_DEVELOPMENT) console.log('Sending request...');
       const response = await fetch(url, config);
-      console.log('Response status:', response.status);
-      
       const data = await response.json();
-      console.log('Response data:', data);
+
+      if (IS_DEVELOPMENT) {
+        console.log('Response status:', response.status);
+        console.log('Response data:', data);
+      }
 
       if (!response.ok) {
         throw new Error(data.message || 'Something went wrong');
@@ -84,7 +80,8 @@ class ApiService {
 
       return data;
     } catch (error) {
-      console.error('API Error:', error);
+      // Only log detailed errors in development
+      if (IS_DEVELOPMENT) console.error('API Error:', error);
       throw error;
     }
   }
@@ -156,6 +153,14 @@ class ApiService {
     });
   }
 
+  async getSavedVenues() {
+    return this.request('/profile/saved-venues');
+  }
+
+  async getMyReviews() {
+    return this.request('/profile/my-reviews');
+  }
+
   async saveVenue(venueId) {
     return this.request('/profile/save-venue', {
       method: 'POST',
@@ -163,10 +168,9 @@ class ApiService {
     });
   }
 
-  async removeSavedVenue(venueId) {
-    return this.request('/profile/remove-venue', {
-      method: 'POST',
-      body: JSON.stringify({ venueId }),
+  async unsaveVenue(venueId) {
+    return this.request(`/profile/saved-venues/${venueId}`, {
+      method: 'DELETE',
     });
   }
 }

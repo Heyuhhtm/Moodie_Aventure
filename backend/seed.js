@@ -1,194 +1,375 @@
-/**
- * DilJourney - Database Seeder
- * Run with: node seed.js
- * Clear DB:  node seed.js --clear
- */
-
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-dotenv.config();
-
 const Venue = require('./models/Venue');
 
-const sampleVenues = [
-  // ─── ROMANTIC ────────────────────────────────────
-  {
-    name: 'The Rooftop Garden Cafe',
-    description: 'A candlelit rooftop cafe with a stunning city view, perfect for intimate evenings.',
-    moods: ['romantic', 'lonely'],
-    moodScores: { romantic: 0.95, lonely: 0.70, family: 0.2, foodie: 0.6, nature: 0.5, club: 0.1 },
-    category: 'cafe',
-    address: '12 Sky Lane, Connaught Place',
-    city: 'Delhi',
-    ambiance: { lighting: 'dim', noiseLevel: 'quiet', seating: 'private', outdoorArea: true, decor: 'elegant' },
-    activityGuide: 'Order the sharing platter, linger over dessert, take a slow walk along the rooftop after.',
-    seekingGuide: 'Seek deep conversation, the glow of city lights, and the feeling of the world slowing down.',
-    priceRange: '$$$',
-    cuisine: 'Continental',
-    openingHours: '6 PM - 12 AM',
-    images: [],
-  },
-  {
-    name: 'Café Mirage',
-    description: 'A hidden gem with fairy lights, soft jazz, and an intimate wine menu.',
-    moods: ['romantic', 'lonely'],
-    moodScores: { romantic: 0.92, lonely: 0.80, family: 0.1, foodie: 0.65, nature: 0.2, club: 0.15 },
-    category: 'cafe',
-    address: '8 Bandra Reclamation',
-    city: 'Mumbai',
-    ambiance: { lighting: 'dim', noiseLevel: 'quiet', seating: 'private', outdoorArea: false, decor: 'rustic' },
-    activityGuide: 'Put your phones away. Order one thing at a time. Let the conversation lead.',
-    seekingGuide: 'Seek warmth, unhurried moments, and the music that fills the silence between words.',
-    priceRange: '$$$',
-    cuisine: 'French',
-    openingHours: '7 PM - 11:30 PM',
-    images: [],
-  },
+dotenv.config();
 
-  // ─── FOODIE ──────────────────────────────────────
+// Sample venues data
+const venues = [
   {
-    name: 'Spice Trail Kitchen',
-    description: 'An award-winning restaurant exploring regional Indian cuisines you\'ve never tried.',
-    moods: ['foodie', 'family'],
-    moodScores: { foodie: 0.97, family: 0.75, romantic: 0.4, lonely: 0.3, nature: 0.2, club: 0.1 },
-    category: 'restaurant',
-    address: '23 Commercial Street',
-    city: 'Bangalore',
-    ambiance: { lighting: 'bright', noiseLevel: 'moderate', seating: 'communal', outdoorArea: false, decor: 'vibrant' },
-    activityGuide: 'Ask the waiter about the dish of the day. Try one thing you\'ve never ordered before.',
-    seekingGuide: 'Seek authentic regional flavors, the story behind each ingredient, and a menu that surprises you.',
-    priceRange: '$$',
-    cuisine: 'Indian Regional',
-    openingHours: '12 PM - 10:30 PM',
-    images: [],
+    name: "The Cozy Corner Cafe",
+    description: "A warm and inviting cafe perfect for quiet conversations and comfortable moments.",
+    moods: ["lonely", "foodie", "nature"],
+    moodScores: {
+      lonely: 0.95,
+      foodie: 0.75,
+      nature: 0.65,
+      romantic: 0.55,
+      family: 0.45,
+      club: 0.2
+    },
+    category: "cafe",
+    address: "123 Main Street",
+    city: "New York",
+    images: ["https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800"],
+    ambiance: {
+      lighting: "warm",
+      noiseLevel: "quiet",
+      seating: "communal",
+      outdoorArea: true,
+      decor: "rustic"
+    },
+    priceRange: "$$",
+    cuisine: "Coffee & Pastries",
+    openingHours: "7:00 AM - 10:00 PM",
+    averageRating: 4.5,
+    totalReviews: 128
   },
   {
-    name: 'The Market Table',
-    description: 'Farm-to-table dining where the menu changes daily based on fresh market produce.',
-    moods: ['foodie'],
-    moodScores: { foodie: 0.98, family: 0.6, romantic: 0.5, lonely: 0.4, nature: 0.6, club: 0.05 },
-    category: 'restaurant',
-    address: '5 Old Market Road',
-    city: 'Jaipur',
-    ambiance: { lighting: 'natural', noiseLevel: 'moderate', seating: 'communal', outdoorArea: true, decor: 'rustic' },
-    activityGuide: 'Ask about today\'s special. Watch the open kitchen. Let the chef recommend the pairing.',
-    seekingGuide: 'Seek freshness, seasonality, honest cooking — food that tastes like someone cared.',
-    priceRange: '$$',
-    cuisine: 'Contemporary Indian',
-    openingHours: '11 AM - 9 PM',
-    images: [],
-  },
-
-  // ─── FAMILY ──────────────────────────────────────
-  {
-    name: 'Wonder World Play Cafe',
-    description: 'A large family cafe with a play zone, group dining, and activities for all ages.',
-    moods: ['family'],
-    moodScores: { family: 0.98, foodie: 0.5, romantic: 0.1, lonely: 0.05, nature: 0.3, club: 0.1 },
-    category: 'cafe',
-    address: '45 Powai Lake Road',
-    city: 'Mumbai',
-    ambiance: { lighting: 'bright', noiseLevel: 'loud', seating: 'communal', outdoorArea: true, decor: 'vibrant' },
-    activityGuide: 'Let the kids pick the first activity. Play a board game together. Order the sharing platters.',
-    seekingGuide: 'Seek shared laughter, the chaos of togetherness, and a moment that becomes a family story.',
-    priceRange: '$$',
-    cuisine: 'Multi-cuisine',
-    openingHours: '10 AM - 9 PM',
-    images: [],
-  },
-
-  // ─── NATURE ──────────────────────────────────────
-  {
-    name: 'The Lakeview Pavilion',
-    description: 'An open-air cafe set beside a serene lake with walking trails and bird-watching spots.',
-    moods: ['nature', 'lonely', 'romantic'],
-    moodScores: { nature: 0.96, lonely: 0.82, romantic: 0.75, family: 0.55, foodie: 0.4, club: 0.05 },
-    category: 'cafe',
-    address: 'Sukhna Lake Road',
-    city: 'Chandigarh',
-    ambiance: { lighting: 'natural', noiseLevel: 'quiet', seating: 'mixed', outdoorArea: true, decor: 'minimalist' },
-    activityGuide: 'Walk the trail first. Then sit with a warm drink and do nothing for at least 20 minutes.',
-    seekingGuide: 'Seek stillness, the sound of water, birdsong, and the feeling of your mind gently clearing.',
-    priceRange: '$',
-    cuisine: 'Cafe & Snacks',
-    openingHours: '7 AM - 8 PM',
-    images: [],
+    name: "Sunset Gardens",
+    description: "Beautiful botanical gardens with serene walking paths and peaceful meditation areas.",
+    moods: ["nature", "lonely", "therapy"],
+    moodScores: {
+      nature: 0.98,
+      lonely: 0.85,
+      therapy: 0.9,
+      family: 0.7,
+      romantic: 0.65,
+      club: 0.1
+    },
+    category: "park",
+    address: "456 Garden Avenue",
+    city: "New York",
+    images: ["https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800"],
+    ambiance: {
+      lighting: "natural",
+      noiseLevel: "quiet",
+      seating: "communal",
+      outdoorArea: true,
+      decor: "natural"
+    },
+    priceRange: "$",
+    openingHours: "6:00 AM - 8:00 PM",
+    averageRating: 4.8,
+    totalReviews: 256
   },
   {
-    name: 'Himalayan Brew',
-    description: 'A mountain-view cafe surrounded by pine trees with outdoor seating and fresh mountain air.',
-    moods: ['nature', 'lonely'],
-    moodScores: { nature: 0.99, lonely: 0.85, romantic: 0.65, family: 0.5, foodie: 0.45, club: 0.02 },
-    category: 'cafe',
-    address: 'Mall Road',
-    city: 'Manali',
-    ambiance: { lighting: 'natural', noiseLevel: 'quiet', seating: 'mixed', outdoorArea: true, decor: 'rustic' },
-    activityGuide: 'Leave your phone inside. Sit outside. Breathe deeply. Watch the mountains do nothing.',
-    seekingGuide: 'Seek restoration, perspective, clean air, and the grounding feeling of being small in a big world.',
-    priceRange: '$',
-    cuisine: 'Cafe',
-    openingHours: '8 AM - 7 PM',
-    images: [],
+    name: "Le Petit Romance",
+    description: "An intimate French restaurant perfect for romantic dinners and special occasions.",
+    moods: ["romantic", "foodie"],
+    moodScores: {
+      romantic: 0.95,
+      foodie: 0.9,
+      family: 0.3,
+      club: 0.2,
+      nature: 0.3,
+      lonely: 0.4
+    },
+    category: "restaurant",
+    address: "789 Love Lane",
+    city: "New York",
+    images: ["https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800"],
+    ambiance: {
+      lighting: "dim",
+      noiseLevel: "quiet",
+      seating: "private",
+      outdoorArea: false,
+      decor: "elegant"
+    },
+    priceRange: "$$$$",
+    cuisine: "French",
+    openingHours: "6:00 PM - 11:00 PM",
+    averageRating: 4.9,
+    totalReviews: 312
   },
-
-  // ─── LONELY ──────────────────────────────────────
   {
-    name: 'The Corner Nook',
-    description: 'A cozy independent bookstore-cafe with warm lighting, quiet corners, and the best filter coffee in town.',
-    moods: ['lonely', 'nature'],
-    moodScores: { lonely: 0.97, nature: 0.4, romantic: 0.55, family: 0.3, foodie: 0.5, club: 0.05 },
-    category: 'cafe',
-    address: '7 Church Street',
-    city: 'Bangalore',
-    ambiance: { lighting: 'warm', noiseLevel: 'quiet', seating: 'private', outdoorArea: false, decor: 'rustic' },
-    activityGuide: 'Pick a book off the shelf. Journal. Order a slow coffee. Let yourself settle without rushing.',
-    seekingGuide: 'Seek warmth, quiet companionship of strangers, and the comfort of a place that doesn\'t demand anything from you.',
-    priceRange: '$',
-    cuisine: 'Cafe',
-    openingHours: '8 AM - 10 PM',
-    images: [],
+    name: "Family Fun Center",
+    description: "The ultimate destination for family entertainment with games, food, and fun for all ages.",
+    moods: ["family", "club"],
+    moodScores: {
+      family: 0.95,
+      club: 0.7,
+      foodie: 0.6,
+      nature: 0.3,
+      romantic: 0.2,
+      lonely: 0.1
+    },
+    category: "activity",
+    address: "321 Fun Street",
+    city: "New York",
+    images: ["https://images.unsplash.com/photo-1511882150382-421056c89033?w=800"],
+    ambiance: {
+      lighting: "bright",
+      noiseLevel: "loud",
+      seating: "communal",
+      outdoorArea: true,
+      decor: "vibrant"
+    },
+    priceRange: "$$",
+    openingHours: "10:00 AM - 10:00 PM",
+    averageRating: 4.3,
+    totalReviews: 567
   },
-
-  // ─── CLUB ────────────────────────────────────────
   {
-    name: 'Pulse Nightclub',
-    description: 'Delhi\'s top nightclub with world-class DJs, a premium bar, and an electric dance floor.',
-    moods: ['club'],
-    moodScores: { club: 0.99, lonely: 0.1, romantic: 0.4, family: 0.0, foodie: 0.2, nature: 0.0 },
-    category: 'club',
-    address: 'DLF Cyberhub',
-    city: 'Delhi',
-    ambiance: { lighting: 'dim', noiseLevel: 'vibrant', seating: 'mixed', outdoorArea: false, decor: 'modern' },
-    activityGuide: 'Dance first, drinks second. Talk to someone new. Let the music choose your mood.',
-    seekingGuide: 'Seek high energy, freedom, spontaneous connection, and the feeling of being completely in the moment.',
-    priceRange: '$$$',
-    cuisine: 'Bar & Cocktails',
-    openingHours: '9 PM - 4 AM',
-    images: [],
+    name: "The Party Palace",
+    description: "New York's hottest nightclub featuring top DJs and unforgettable nights.",
+    moods: ["club", "motivation"],
+    moodScores: {
+      club: 0.98,
+      motivation: 0.6,
+      family: 0.05,
+      nature: 0.05,
+      lonely: 0.1,
+      romantic: 0.3
+    },
+    category: "club",
+    address: "555 Party Avenue",
+    city: "New York",
+    images: ["https://images.unsplash.com/photo-1571206029886-68b0087f6192?w=800"],
+    ambiance: {
+      lighting: "dim",
+      noiseLevel: "vibrant",
+      seating: "communal",
+      outdoorArea: false,
+      decor: "modern"
+    },
+    priceRange: "$$$",
+    openingHours: "9:00 PM - 4:00 AM",
+    averageRating: 4.4,
+    totalReviews: 892
   },
+  {
+    name: "Gourmet Paradise",
+    description: "A foodie's dream featuring cuisines from around the world.",
+    moods: ["foodie", "family"],
+    moodScores: {
+      foodie: 0.98,
+      family: 0.7,
+      romantic: 0.6,
+      nature: 0.3,
+      club: 0.4,
+      lonely: 0.5
+    },
+    category: "restaurant",
+    address: "777 Foodie Boulevard",
+    city: "New York",
+    images: ["https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800"],
+    ambiance: {
+      lighting: "warm",
+      noiseLevel: "moderate",
+      seating: "mixed",
+      outdoorArea: true,
+      decor: "modern"
+    },
+    priceRange: "$$$",
+    cuisine: "International",
+    openingHours: "11:00 AM - 11:00 PM",
+    averageRating: 4.7,
+    totalReviews: 445
+  },
+  {
+    name: "Tranquil Wellness Center",
+    description: "A peaceful sanctuary for relaxation, meditation, and healing.",
+    moods: ["therapy", "nature", "lonely"],
+    moodScores: {
+      therapy: 0.98,
+      nature: 0.8,
+      lonely: 0.85,
+      family: 0.4,
+      romantic: 0.5,
+      club: 0.05
+    },
+    category: "other",
+    address: "999 Peace Lane",
+    city: "New York",
+    images: ["https://images.unsplash.com/photo-1545205597-3d9d02c29597?w=800"],
+    ambiance: {
+      lighting: "dim",
+      noiseLevel: "quiet",
+      seating: "private",
+      outdoorArea: true,
+      decor: "minimalist"
+    },
+    priceRange: "$$$$",
+    openingHours: "8:00 AM - 8:00 PM",
+    averageRating: 4.9,
+    totalReviews: 178
+  },
+  {
+    name: "Fitness Forge Gym",
+    description: "State-of-the-art fitness facility with personal training and group classes.",
+    moods: ["gym", "motivation"],
+    moodScores: {
+      gym: 0.98,
+      motivation: 0.95,
+      family: 0.3,
+      club: 0.4,
+      nature: 0.2,
+      lonely: 0.3
+    },
+    category: "activity",
+    address: "888 Strength Street",
+    city: "New York",
+    images: ["https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800"],
+    ambiance: {
+      lighting: "bright",
+      noiseLevel: "moderate",
+      seating: "communal",
+      outdoorArea: false,
+      decor: "modern"
+    },
+    priceRange: "$$$",
+    openingHours: "24 Hours",
+    averageRating: 4.6,
+    totalReviews: 623
+  },
+  {
+    name: "Book Haven Library",
+    description: "A quiet haven for readers and students seeking knowledge and tranquility.",
+    moods: ["library", "lonely", "motivation"],
+    moodScores: {
+      library: 0.98,
+      lonely: 0.9,
+      motivation: 0.7,
+      family: 0.3,
+      romantic: 0.2,
+      club: 0.05
+    },
+    category: "other",
+    address: "111 Scholar Way",
+    city: "New York",
+    images: ["https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=800"],
+    ambiance: {
+      lighting: "warm",
+      noiseLevel: "quiet",
+      seating: "private",
+      outdoorArea: false,
+      decor: "classic"
+    },
+    priceRange: "$",
+    openingHours: "9:00 AM - 9:00 PM",
+    averageRating: 4.8,
+    totalReviews: 234
+  },
+  {
+    name: "CineMax Theater",
+    description: "Premium cinema experience with the latest blockbusters and indie films.",
+    moods: ["movies", "family", "romantic"],
+    moodScores: {
+      movies: 0.98,
+      family: 0.7,
+      romantic: 0.75,
+      club: 0.3,
+      nature: 0.1,
+      lonely: 0.4
+    },
+    category: "activity",
+    address: "444 Cinema Street",
+    city: "New York",
+    images: ["https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=800"],
+    ambiance: {
+      lighting: "dim",
+      noiseLevel: "quiet",
+      seating: "private",
+      outdoorArea: false,
+      decor: "modern"
+    },
+    priceRange: "$$",
+    openingHours: "10:00 AM - 12:00 AM",
+    averageRating: 4.5,
+    totalReviews: 1023
+  },
+  {
+    name: "Elite Shopping Plaza",
+    description: "Luxury shopping destination with premium brands and designer stores.",
+    moods: ["shopping", "family"],
+    moodScores: {
+      shopping: 0.98,
+      family: 0.6,
+      romantic: 0.5,
+      club: 0.3,
+      nature: 0.2,
+      lonely: 0.4
+    },
+    category: "other",
+    address: "222 Luxury Lane",
+    city: "New York",
+    images: ["https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800"],
+    ambiance: {
+      lighting: "bright",
+      noiseLevel: "moderate",
+      seating: "communal",
+      outdoorArea: false,
+      decor: "elegant"
+    },
+    priceRange: "$$$$",
+    openingHours: "10:00 AM - 9:00 PM",
+    averageRating: 4.6,
+    totalReviews: 789
+  },
+  {
+    name: "Inspire Coworking Space",
+    description: "Modern workspace designed for productivity and creative collaboration.",
+    moods: ["motivation", "library"],
+    moodScores: {
+      motivation: 0.95,
+      library: 0.8,
+      lonely: 0.6,
+      family: 0.2,
+      romantic: 0.1,
+      club: 0.3
+    },
+    category: "cafe",
+    address: "666 Productivity Plaza",
+    city: "New York",
+    images: ["https://images.unsplash.com/photo-1497366216548-37526070297c?w=800"],
+    ambiance: {
+      lighting: "bright",
+      noiseLevel: "moderate",
+      seating: "communal",
+      outdoorArea: true,
+      decor: "modern"
+    },
+    priceRange: "$$",
+    cuisine: "Coffee & Work",
+    openingHours: "6:00 AM - 10:00 PM",
+    averageRating: 4.7,
+    totalReviews: 345
+  }
 ];
 
-const seedDB = async () => {
+const seedDatabase = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI);
-    console.log('✅ MongoDB connected');
-
-    if (process.argv[2] === '--clear') {
-      await Venue.deleteMany({});
-      console.log('🗑️  All venues cleared');
-      process.exit(0);
+    // Connect to MongoDB
+    if (!process.env.MONGO_URI) {
+      console.error('Please set MONGO_URI in .env file');
+      process.exit(1);
     }
 
-    await Venue.deleteMany({});
-    await Venue.insertMany(sampleVenues);
+    await mongoose.connect(process.env.MONGO_URI);
 
-    console.log(`🌱 Seeded ${sampleVenues.length} venues successfully!`);
-    console.log('Cities:', [...new Set(sampleVenues.map(v => v.city))].join(', '));
+    // Clear existing venues
+    await Venue.deleteMany({});
+
+    // Insert new venues
+    await Venue.insertMany(venues);
+    console.log(`Successfully seeded ${venues.length} venues`);
+
     process.exit(0);
   } catch (error) {
-    console.error('❌ Seed error:', error.message);
+    console.error('Error seeding database:', error);
     process.exit(1);
   }
 };
 
-seedDB();
+seedDatabase();

@@ -65,32 +65,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Optimized IntersectionObserver with rootMargin for better lazy loading
 const reveals = document.querySelectorAll('.reveal');
-const obs = new IntersectionObserver(entries => {
-  entries.forEach(e => { 
-    if (e.isIntersecting) { 
-      e.target.classList.add('visible'); 
-      obs.unobserve(e.target); 
-    } 
+if (reveals.length > 0) {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { 
+      if (e.isIntersecting) { 
+        e.target.classList.add('visible'); 
+        obs.unobserve(e.target); 
+      } 
+    });
+  }, { 
+    threshold: 0.12,
+    rootMargin: '0px 0px 50px 0px' // Start loading 50px before element is visible
   });
-}, { 
-  threshold: 0.12,
-  rootMargin: '0px 0px 50px 0px' // Start loading 50px before element is visible
-});
-reveals.forEach(r => obs.observe(r));
+  reveals.forEach(r => obs.observe(r));
+}
 
+// Mobile Menu Toggle - Consolidated
 const hamburger = document.getElementById('hamburger');
 const mobileMenu = document.getElementById('mobileMenu');
 const mobileClose = document.getElementById('mobileClose');
-if (hamburger && mobileMenu && mobileClose) {
-  const toggleMenu = (isOpen) => {
-    mobileMenu.classList.toggle('open', isOpen);
-    hamburger.classList.toggle('open', isOpen);
-  };
-  hamburger.addEventListener('click', () => toggleMenu(true));
-  mobileClose.addEventListener('click', () => toggleMenu(false));
-  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => toggleMenu(false)));
+
+function setupMobileMenu() {
+  if (hamburger && mobileMenu && mobileClose) {
+    const toggleMenu = (isOpen) => {
+      mobileMenu.classList.toggle('open', isOpen);
+      hamburger.classList.toggle('open', isOpen);
+    };
+    hamburger.addEventListener('click', () => toggleMenu(true));
+    mobileClose.addEventListener('click', () => toggleMenu(false));
+    mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => toggleMenu(false)));
+  }
 }
 
+setupMobileMenu();
+
+// Mood pill selection - Only on index page
 document.querySelectorAll('.mood-pill').forEach(pill => {
   pill.addEventListener('click', function() {
     document.querySelectorAll('.mood-pill').forEach(p => p.style.outline = '');
@@ -100,6 +109,7 @@ document.querySelectorAll('.mood-pill').forEach(pill => {
   });
 });
 
+// Nav scroll behavior
 let lastScroll = 0;
 const nav = document.querySelector('nav');
 let navHidden = false;
@@ -122,110 +132,62 @@ if (nav) {
   nav.style.transition = 'transform 0.35s ease';
 }
 
-const loginForm = document.getElementById('login-form');
-const signupForm = document.getElementById('signup-form');
-const forgotForm = document.getElementById('forgot-form');
-const showSignupBtn = document.getElementById('show-signup');
-const showLoginBtn = document.getElementById('show-login');
-const showForgotBtn = document.getElementById('show-forgot');
-const showLoginFromForgotBtn = document.getElementById('show-login-from-forgot');
-const backBtn = document.getElementById('form-back-btn');
+// Account page form switching - Consolidated to auth.js
+// This section is now handled by js/auth.js for better code organization
 
-const password = document.getElementById('signup-password');
-const confirmPassword = document.getElementById('signup-confirm-password');
-const passwordError = document.getElementById('password-error');
-
-if (loginForm && signupForm && forgotForm && showSignupBtn && showLoginBtn && showForgotBtn && showLoginFromForgotBtn && backBtn) {
-  const forms = [loginForm, signupForm, forgotForm];
-
-  const switchForm = (formToShow) => {
-    forms.forEach(form => {
-      form.style.display = (form === formToShow) ? 'block' : 'none';
-    });
-  };
-
-  const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.get('form') === 'login') {
-    switchForm(loginForm);
-  } else {
-    switchForm(signupForm);
-  }
-
-  showLoginBtn.addEventListener('click', (e) => { e.preventDefault(); switchForm(loginForm); });
-  showLoginFromForgotBtn.addEventListener('click', (e) => { e.preventDefault(); switchForm(loginForm); });
-  showSignupBtn.addEventListener('click', (e) => { e.preventDefault(); switchForm(signupForm); });
-  showForgotBtn.addEventListener('click', (e) => { e.preventDefault(); switchForm(forgotForm); });
-
-  backBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    if (loginForm.style.display === 'block') {
-      switchForm(signupForm);
-    } else if (forgotForm.style.display === 'block') {
-      switchForm(loginForm);
-    } else if (signupForm.style.display === 'block') {
-      window.location.href = 'index.html';
-    }
-  });
-
-  if (password && confirmPassword && passwordError) {
-    const validatePassword = () => {
-      if (password.value !== confirmPassword.value && confirmPassword.value.length > 0) {
-        passwordError.style.display = 'block';
-        confirmPassword.setCustomValidity("Passwords Don't Match");
-      } else {
-        passwordError.style.display = 'none';
-        confirmPassword.setCustomValidity('');
-      }
-    };
-
-    password.addEventListener('change', validatePassword);
-    confirmPassword.addEventListener('keyup', validatePassword);
-
-    signupForm.querySelector('form').addEventListener('submit', validatePassword);
-  }
-}
-
-// Contact Form Logic with EmailJS
+// Contact Form Logic with EmailJS - Only on contact page
 const contactForm = document.getElementById('contact-form');
 
 if (contactForm) {
   const statusDiv = document.getElementById('contact-form-status');
-  emailjs.init('XK5pYs1BHTtUTzA5R');
+  
+  // Check if emailjs is loaded
+  if (typeof emailjs !== 'undefined') {
+    emailjs.init('XK5pYs1BHTtUTzA5R');
 
-  contactForm.addEventListener('submit', function(event) {
-    event.preventDefault();
+    contactForm.addEventListener('submit', function(event) {
+      event.preventDefault();
 
-    const submitBtn = contactForm.querySelector('button[type="submit"]');
-    const originalBtnText = submitBtn.innerHTML;
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = 'Sending...';
-    statusDiv.innerHTML = '';
-    statusDiv.className = '';
+      const submitBtn = contactForm.querySelector('button[type="submit"]');
+      const originalBtnText = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = 'Sending...';
+      statusDiv.innerHTML = '';
+      statusDiv.className = '';
 
-    const serviceID = 'service_2t5by0a';
-    const templateID = 'template_qyro8xz';
+      const serviceID = 'service_2t5by0a';
+      const templateID = 'template_qyro8xz';
 
-    emailjs.sendForm(serviceID, templateID, this)
-      .then(() => {
-        submitBtn.innerHTML = 'Message Sent!';
-        statusDiv.innerHTML = 'Thank you! Your message has been sent successfully.';
-        statusDiv.className = 'success';
-        contactForm.reset();
-        setTimeout(() => {
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = originalBtnText;
-          statusDiv.innerHTML = '';
-        }, 5000);
-      }, (err) => {
-        submitBtn.innerHTML = 'Send Failed';
-        statusDiv.innerHTML = 'Sorry, something went wrong. Please try again.';
-        statusDiv.className = 'error';
-        console.error('EmailJS send failed:', err);
-        setTimeout(() => {
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = originalBtnText;
-          statusDiv.innerHTML = '';
-        }, 5000);
-      });
-  });
+      emailjs.sendForm(serviceID, templateID, this)
+        .then(() => {
+          submitBtn.innerHTML = 'Message Sent!';
+          statusDiv.innerHTML = 'Thank you! Your message has been sent successfully.';
+          statusDiv.className = 'success';
+          contactForm.reset();
+          setTimeout(() => {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
+            statusDiv.innerHTML = '';
+          }, 5000);
+        }, (err) => {
+          submitBtn.innerHTML = 'Send Failed';
+          statusDiv.innerHTML = 'Sorry, something went wrong. Please try again.';
+          statusDiv.className = 'error';
+          console.error('EmailJS send failed:', err);
+          setTimeout(() => {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
+            statusDiv.innerHTML = '';
+          }, 5000);
+        });
+    });
+  } else {
+    console.warn('EmailJS not loaded - contact form will not work');
+  }
 }
+
+// Export utility functions for use in other scripts
+window.dilJourneyUtils = {
+  throttle,
+  setupMobileMenu
+};

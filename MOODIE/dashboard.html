@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard | DilJourney</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Dashboard Specific Styles */
+    .dashboard-hero {
+      min-height: 30vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 130px 5% 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dashboard-hero-bg {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .dashboard-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.35;
+      animation: float 8s ease-in-out infinite;
+      will-change: transform;
+    }
+
+    .dashboard-orb-1 {
+      width: 350px;
+      height: 350px;
+      background: var(--accent);
+      top: -10%;
+      left: -10%;
+      animation-delay: 0s;
+      opacity: 0.25;
+    }
+
+    .dashboard-orb-2 {
+      width: 280px;
+      height: 280px;
+      background: #E9B44C;
+      top: 20%;
+      right: -8%;
+      animation-delay: -3s;
+    }
+
+    .dashboard-orb-3 {
+      width: 220px;
+      height: 220px;
+      background: #87A7C5;
+      bottom: 0%;
+      left: 25%;
+      animation-delay: -6s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-20px) scale(1.03); }
+    }
+
+    .welcome-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(166,124,82,0.12);
+      border: 1px solid rgba(166,124,82,0.25);
+      color: var(--accent);
+      padding: 7px 16px;
+      border-radius: 50px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.2s forwards;
+    }
+
+    .welcome-pill-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.7); }
+    }
+
+    .dashboard-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 700;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.4s forwards;
+      color: var(--text);
+    }
+
+    .dashboard-title .highlight {
+      background: linear-gradient(135deg, var(--accent) 0%, #c99a71 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .dashboard-sub {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: var(--muted);
+      max-width: 560px;
+      line-height: 1.65;
+      margin: 0 auto 40px;
+      font-weight: 400;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.6s forwards;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* User Profile Dropdown in Nav */
+    .user-menu {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      padding: 6px 12px;
+      border-radius: 50px;
+      transition: background 0.2s;
+    }
+
+    .user-menu:hover {
+      background: rgba(166, 124, 82, 0.1);
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), #c99a71);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #fff;
+      font-size: 0.9rem;
+    }
+
+    .user-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .user-dropdown {
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 8px;
+      min-width: 200px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-10px);
+      transition: all 0.25s ease;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      z-index: 1000;
+    }
+
+    .user-menu:hover .user-dropdown {
+      opacity: 1;
+      pointer-events: all;
+      transform: translateY(0);
+    }
+
+    .dropdown-header {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 8px;
+    }
+
+    .dropdown-header-name {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+
+    .dropdown-header-email {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.9rem;
+      border-radius: 10px;
+      transition: background 0.2s;
+      cursor: pointer;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+    }
+
+    .dropdown-item:hover {
+      background: rgba(166, 124, 82, 0.1);
+    }
+
+    .dropdown-item.logout {
+      color: #D9534F;
+    }
+
+    .dropdown-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 8px 0;
+    }
+
+    /* Moods Section */
+    .moods-section {
+      padding: 30px 5% 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .moods-section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+
+    .moods-section-sub {
+      text-align: center;
+      color: var(--muted);
+      font-size: 1.05rem;
+      margin-bottom: 50px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .user-name {
+        display: none;
+      }
+      
+      .dashboard-hero {
+        min-height: 50vh;
+        padding: 120px 5% 40px;
+      }
+    }
+  </style>
+  <style>
+    .onboarding-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(30, 23, 21, 0.6);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(5px);
+    }
+  </style>
+</head>
+<body>
+
+<!-- Onboarding Modal -->
+<div id="onboardingModal" class="onboarding-overlay">
+  <div class="form-container" style="max-width: 550px; animation: fadeUp 0.5s forwards;">
+    <h2 class="form-title">Just one more step!</h2>
+    <p class="form-sub">Help us personalize your experience. You can skip this and update it later in your profile.</p>
+    <form id="onboarding-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="onboarding-age">Age</label>
+          <input type="number" id="onboarding-age" min="13">
+        </div>
+        <div class="form-group">
+          <label for="onboarding-gender">Gender</label>
+          <select id="onboarding-gender">
+            <option value="">Select...</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="non-binary">Non-binary</option>
+            <option value="other">Other</option>
+            <option value="prefer-not-to-say">Prefer not to say</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>Select Your Primary Mood</label>
+        <div class="choice-group">
+          <input type="radio" id="omood-happy" name="onboarding-primary-mood" value="happy" class="choice-input">
+          <label for="omood-happy" class="choice-label">😊 Happy</label>
+          <input type="radio" id="omood-sad" name="onboarding-primary-mood" value="sad" class="choice-input">
+          <label for="omood-sad" class="choice-label">😔 Sad</label>
+          <input type="radio" id="omood-romantic" name="onboarding-primary-mood" value="romantic" class="choice-input">
+          <label for="omood-romantic" class="choice-label">💕 Romantic</label>
+          <input type="radio" id="omood-motivated" name="onboarding-primary-mood" value="motivated" class="choice-input">
+          <label for="omood-motivated" class="choice-label">💪 Motivated</label>
+          <input type="radio" id="omood-chill" name="onboarding-primary-mood" value="chill" class="choice-input">
+          <label for="omood-chill" class="choice-label">🧘 Chill</label>
+          <input type="radio" id="omood-party" name="onboarding-primary-mood" value="party" class="choice-input">
+          <label for="omood-party" class="choice-label">🎉 Party</label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Content Preferences</label>
+        <div class="choice-group">
+          <input type="checkbox" id="opref-music" name="onboarding-preferences" value="music" class="choice-input">
+          <label for="opref-music" class="choice-label">🎵 Music</label>
+          <input type="checkbox" id="opref-quotes" name="onboarding-preferences" value="quotes" class="choice-input">
+          <label for="opref-quotes" class="choice-label">❝ Quotes</label>
+          <input type="checkbox" id="opref-videos" name="onboarding-preferences" value="videos" class="choice-input">
+          <label for="opref-videos" class="choice-label">🎬 Videos</label>
+          <input type="checkbox" id="opref-activities" name="onboarding-preferences" value="activities" class="choice-input">
+          <label for="opref-activities" class="choice-label">🤸 Activities</label>
+        </div>
+      </div>
+
+      <div id="onboarding-message" style="text-align: center; margin-bottom: 15px; color: red;"></div>
+
+      <div style="display: flex; gap: 15px; margin-top: 20px;">
+        <button type="button" id="skipOnboarding" class="btn-secondary" style="width: 100%;">Skip for Now</button>
+        <button type="submit" id="saveOnboarding" class="btn-primary" style="width: 100%;">Save & Continue</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" id="mobileClose">✕</button>
+  <a href="index.html#how-it-works">How It Works</a>
+  <a href="index.html#features">Features</a>
+  <a href="Explore.html">Explore</a>
+  <a href="index.html#testimonials">Reviews</a>
+  <a href="dashboard.html" class="btn-primary" style="font-size:1rem; margin-top:10px;">Dashboard</a>
+  <a href="#" id="logout-btn-mobile" style="display:none; margin-top:10px;">Logout</a>
+</div>
+
+<!-- Navigation -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="Explore_Component_Picture/Logo.png" alt="DilJourney Logo" class="nav-logo-img">
+    <span><span class="logo-dil">Dil</span><span class="logo-journey">Journey</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="Explore.html">Explore</a></li>
+    <li>
+      <div class="user-menu" id="userMenu">
+        <div class="user-avatar" id="userAvatar">U</div>
+        <span class="user-name" id="userName">User</span>
+        <div class="user-dropdown">
+          <div class="dropdown-header">
+            <div class="dropdown-header-name" id="dropdownName">User Name</div>
+            <div class="dropdown-header-email" id="dropdownEmail">user@email.com</div>
+          </div>
+          <a href="dashboard.html" class="dropdown-item">🏠 Dashboard</a>
+          <a href="profile.html" class="dropdown-item">👤 My Profile</a>
+          <a href="saved-venues.html" class="dropdown-item">🔖 Saved Places</a>
+          <a href="#" class="dropdown-item">⭐ My Reviews</a>
+          <div class="dropdown-divider"></div>
+          <button class="dropdown-item logout" id="logoutBtn">↩ Log Out</button>
+        </div>
+      </div>
+    </li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Dashboard Hero -->
+<section class="dashboard-hero">
+  <div class="dashboard-hero-bg">
+    <div class="dashboard-orb dashboard-orb-1"></div>
+    <div class="dashboard-orb dashboard-orb-2"></div>
+    <div class="dashboard-orb dashboard-orb-3"></div>
+  </div>
+  
+  <div class="welcome-pill">
+    <span class="welcome-pill-dot"></span>
+    <span id="greeting">Welcome</span>, <span id="userFirstName">User</span> 👋
+  </div>
+  
+  <h1 class="dashboard-title">
+    Find Your <span class="highlight">Perfect Vibe</span>
+  </h1>
+  
+  <p class="dashboard-sub">
+    Discover places that match your mood. Whether you're feeling romantic, adventurous, or just need some quiet time — we've got you covered.
+  </p>
+</section>
+
+<!-- Moods Grid -->
+<section class="moods-section">
+  <h2 class="moods-section-title">What's the mood?</h2>
+  <p class="moods-section-sub">Choose a vibe and let's find your perfect place</p>
+  
+  <div class="mood-showcase-grid">
+    <!-- Family Mood -->
+    <a href="venues.html?mood=family" class="mood-card mc-family">
+      <div class="mood-card-bg"></div>
+      <div class="mood-card-img-wrapper">
+        <img src="Explore_Component_Picture/family.jpg" alt="Family outing" loading="lazy" decoding="async" width="350" height="180">
+        <div class="mood-card-img-skeleton"></div>
+      </div>
+      <h3 class="mood-card-name">Family</h3>
+      <p class="mood-card-desc">Wholesome places perfect for creating memories with your loved ones.</p>
+      <div class="mood-card-tags">
+        <span class="mood-tag">Kid-Friendly</span>
+        <span class="mood-tag">Spacious</span>
+      </div>
+    </a>
+
+    <!-- Foodie Mood -->
+    <a href="venues.html?mood=foodie" class="mood-card mc-foodie">
+      <div class="mood-card-bg"></div>
+      <div class="mood-card-img-wrapper">
+        <img src="Explore_Component_Picture/Foodie.jpg" alt="Gourmet food" loading="lazy" decoding="async" width="350" height="180">
+        <div class="mood-card-img-skeleton"></div>
+      </div>
+      <h3 class="mood-card-name">Foodie</h3>
+      <p class="mood-card-desc">Embark on a culinary adventure. Discover top-rated restaurants and unique experiences.</p>
+      <div class="mood-card-tags">
+        <span class="mood-tag">Gourmet</span>
+        <span class="mood-tag">Top Rated</span>
+      </div>
+    </a>
+
+    <!-- Romantic Mood -->
+    <a href="venues.html?mood=romantic" class="mood-card mc-romantic">
+      <div class="mood-card-bg"></div>
+      <div class="mood-card-img-wrapper">
+        <img src="Explore_Component_Picture/romantic.jpg" alt="Romantic dinner" loading="lazy" decoding="async" width="350" height="180">
+        <div class="mood-card-img-skeleton"></div>
+      </div>
+      <h3 class="mood-card-name">Romantic</h3>
+      <p class="mood-card-desc">Intimate and charming spots for a perfect date night.</p>
+      <div class="mood-card-tags">
+        <span class="mood-tag">Cozy</span>
+        <span class="mood-tag">Intimate</span>
+      </div>
+    </a>
+
+    <!-- Nature Mood -->
+    <a href="venues.html?mood=nature" class="mood-card mc-nature">
+      <div class="mood-card-bg"></div>
+      <div class="mood-card-img-wrapper">
+        <img src="Explore_Component_Picture/nature.jpg" alt="Serene nature" loading="lazy" decoding="async" width="350" height="180">
+        <div class="mood-card-img-skeleton"></div>
+      </div>
+      <h3 class="mood-card-name">Nature</h3>
+      <p class="mood-card-desc">Escape the city buzz. Find serene parks and peaceful gardens.</p>
+      <div class="mood-card-tags">
+        <span class="mood-tag">Peaceful</span>
+        <span class="mood-tag">Outdoors</span>
+      </div>
+    </a>
+
+    <!-- Lonely Mood -->
+    <a href="venues.html?mood=lonely" class="mood-card mc-lonely">
+      <div class="mood-card-bg"></div>
+      <div class="mood-card-img-wrapper">
+        <img src="Explore_Component_Picture/Loniness.jpg" alt="Quiet corner" loading="lazy" decoding="async" width="350" height="180">
+        <div class="mood-card-img-skeleton"></div>
+      </div>
+      <h3 class="mood-card-name">Lonely</h3>
+      <p class="mood-card-desc">Comforting and quiet spaces where you can be with your thoughts.</p>
+      <div class="mood-card-tags">
+        <span class="mood-tag">Quiet</span>
+        <span class="mood-tag">Comforting</span>
+      </div>
+    </a>
+
+    <!-- Club Mood -->
+    <a href="venues.html?mood=club" class="mood-card mc-club">
+      <div class="mood-card-bg"></div>
+      <div class="mood-card-img-wrapper">
+        <img src="Explore_Component_Picture/club.jpg" alt="Vibrant nightclub" loading="lazy" decoding="async" width="350" height="180">
+        <div class="mood-card-img-skeleton"></div>
+      </div>
+      <h3 class="mood-card-name">Club</h3>
+      <p class="mood-card-desc">Ready to party? Discover the most happening clubs and bars.</p>
+      <div class="mood-card-tags">
+        <span class="mood-tag">Energetic</span>
+        <span class="mood-tag">Nightlife</span>
+      </div>
+    </a>
+
+    <!-- Motivation Mood -->
+    <a href="venues.html?mood=motivation" class="mood-card mc-motivation">
+      <div class="mood-card-bg"></div>
+      <div class="mood-card-img-wrapper">
+        <img src="Explore_Component_Picture/Motivation.jpg" alt="Inspiring workspace" loading="lazy" decoding="async" width="350" height="180">
+        <div class="mood-card-img-skeleton"></div>
+      </div>
+      <h3 class="mood-card-name">Motivation</h3>
+      <p class="mood-card-desc">Find inspiring environments to get work done and stay productive.</p>
+      <div class="mood-card-tags">
+        <span class="mood-tag">Productive</span>
+        <span class="mood-tag">Focused</span>
+      </div>
+    </a>
+
+    <!-- Movies Mood -->
+    <a href="venues.html?mood=movies" class="mood-card mc-movies">
+      <div class="mood-card-bg"></div>
+      <div class="mood-card-img-wrapper">
+        <img src="Explore_Component_Picture/Movie.jpg" alt="Cinema hall" loading="lazy" decoding="async" width="350" height="180">
+        <div class="mood-card-img-skeleton"></div>
+      </div>
+      <h3 class="mood-card-name">Movies</h3>
+      <p class="mood-card-desc">Catch the latest blockbusters or an indie gem at the best cinemas.</p>
+      <div class="mood-card-tags">
+        <span class="mood-tag">Entertainment</span>
+        <span class="mood-tag">Cinema</span>
+      </div>
+    </a>
+
+    <!-- Library Mood -->
+    <a href="venues.html?mood=library" class="mood-card mc-library">
+      <div class="mood-card-bg"></div>
+      <div class="mood-card-img-wrapper">
+        <img src="Explore_Component_Picture/library.jpg" alt="Quiet library" loading="lazy" decoding="async" width="350" height="180">
+        <div class="mood-card-img-skeleton"></div>
+      </div>
+      <h3 class="mood-card-name">Library</h3>
+      <p class="mood-card-desc">Find a quiet and studious atmosphere for reading and studying.</p>
+      <div class="mood-card-tags">
+        <span class="mood-tag">Quiet</span>
+        <span class="mood-tag">Studious</span>
+      </div>
+    </a>
+
+    <!-- Therapy Mood -->
+    <a href="venues.html?mood=therapy" class="mood-card mc-therapy">
+      <div class="mood-card-bg"></div>
+      <div class="mood-card-img-wrapper">
+        <img src="Explore_Component_Picture/Tharapy.jpg" alt="Calm therapy room" loading="lazy" decoding="async" width="350" height="180">
+        <div class="mood-card-img-skeleton"></div>
+      </div>
+      <h3 class="mood-card-name">Therapy</h3>
+      <p class="mood-card-desc">Spaces designed for peace and self-reflection.</p>
+      <div class="mood-card-tags">
+        <span class="mood-tag">Calm</span>
+        <span class="mood-tag">Wellness</span>
+      </div>
+    </a>
+
+    <!-- Gym Mood -->
+    <a href="venues.html?mood=gym" class="mood-card mc-gym">
+      <div class="mood-card-bg"></div>
+      <div class="mood-card-img-wrapper">
+        <img src="Explore_Component_Picture/gym.jpg" alt="Modern gym" loading="lazy" decoding="async" width="350" height="180">
+        <div class="mood-card-img-skeleton"></div>
+      </div>
+      <h3 class="mood-card-name">Gym</h3>
+      <p class="mood-card-desc">Get your body moving. Discover top-rated gyms and fitness studios.</p>
+      <div class="mood-card-tags">
+        <span class="mood-tag">Active</span>
+        <span class="mood-tag">Fitness</span>
+      </div>
+    </a>
+
+    <!-- Shopping Mood -->
+    <a href="venues.html?mood=shopping" class="mood-card mc-shopping">
+      <div class="mood-card-bg"></div>
+      <div class="mood-card-img-wrapper">
+        <img src="Explore_Component_Picture/Shopping.jpg" alt="Shopping mall" loading="lazy" decoding="async" width="350" height="180">
+        <div class="mood-card-img-skeleton"></div>
+      </div>
+      <h3 class="mood-card-name">Shopping</h3>
+      <p class="mood-card-desc">Indulge in some retail therapy at boutiques and malls.</p>
+      <div class="mood-card-tags">
+        <span class="mood-tag">Retail</span>
+        <span class="mood-tag">Fashion</span>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item reveal">
+      <div class="stat-num">10K+</div>
+      <div class="stat-label">Curated Places</div>
+    </div>
+    <div class="stat-item reveal">
+      <div class="stat-num">500K+</div>
+      <div class="stat-label">Happy Outings</div>
+    </div>
+    <div class="stat-item reveal">
+      <div class="stat-num">25+</div>
+      <div class="stat-label">Cities Covered</div>
+    </div>
+    <div class="stat-item reveal">
+      <div class="stat-num">4.9★</div>
+      <div class="stat-label">User Rating</div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer-simple">
+  <div class="footer-inner">
+    <div class="footer-bottom">
+      <p>&copy; 2026 DilJourney. All rights reserved.</p>
+      <div class="footer-socials">
+        <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer" class="social-btn">𝕏</a>
+        <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" class="social-btn">in</a>
+        <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" class="social-btn">f</a>
+        <a href="https://www.gmail.com" class="social-btn">✉</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="script.js"></script>
+<script>
+  // Dashboard-specific initialization
+  document.addEventListener('DOMContentLoaded', () => {
+    // Check authentication
+    if (!window.auth || !window.auth.isAuthenticated()) {
+      // Not logged in, redirect to account page
+      window.location.href = 'account.html';
+      return;
+    }
+
+    // Load user data from localStorage
+    const userData = localStorage.getItem('user');
+    
+    if (userData) {
+      try {
+        const user = JSON.parse(userData);
+        
+        // Update user info in the UI
+        const firstName = user.name ? user.name.split(' ')[0] : 'User';
+        const initial = user.name ? user.name.charAt(0).toUpperCase() : 'U';
+        
+        document.getElementById('userFirstName').textContent = firstName;
+        document.getElementById('userName').textContent = firstName;
+        document.getElementById('dropdownName').textContent = user.name || 'User';
+        document.getElementById('dropdownEmail').textContent = user.email || 'Welcome back!';
+        document.getElementById('userAvatar').textContent = initial;
+        
+        // Set greeting based on time
+        const hour = new Date().getHours();
+        let greeting = 'Welcome';
+        if (hour < 12) greeting = 'Good Morning';
+        else if (hour < 17) greeting = 'Good Afternoon';
+        else greeting = 'Good Evening';
+        document.getElementById('greeting').textContent = greeting;
+        
+      } catch (e) {
+        console.error('Error parsing user data:', e);
+        window.location.href = 'account.html';
+      }
+    }
+
+    // Image loaded handling
+    const images = document.querySelectorAll('.mood-card img');
+    images.forEach(img => {
+      if (img.complete) {
+        img.classList.add('loaded');
+        img.parentElement.querySelector('.mood-card-img-skeleton')?.classList.add('hidden');
+      } else {
+        img.addEventListener('load', () => {
+          img.classList.add('loaded');
+          img.parentElement.querySelector('.mood-card-img-skeleton')?.classList.add('hidden');
+        });
+      }
+    });
+
+    // Handle logout - use consolidated auth module
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.auth.logout();
+      });
+    }
+
+    // Also handle mobile logout
+    const logoutBtnMobile = document.getElementById('logout-btn-mobile');
+    if (logoutBtnMobile) {
+      logoutBtnMobile.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.auth.logout();
+      });
+    }
+
+    // Scroll reveal animation
+    const reveals = document.querySelectorAll('.reveal');
+    const revealOnScroll = () => {
+      reveals.forEach((el, i) => {
+        const rect = el.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        if (rect.top < windowHeight - 100) {
+          setTimeout(() => {
+            el.classList.add('visible');
+          }, i * 100);
+        }
+      });
+    };
+    
+    window.addEventListener('scroll', revealOnScroll);
+    revealOnScroll(); // Initial check
+  });
+
+  // Onboarding Modal Logic
+  const onboardingModal = document.getElementById('onboardingModal');
+  const onboardingForm = document.getElementById('onboarding-form');
+  const skipBtn = document.getElementById('skipOnboarding');
+
+  function showOnboardingModal() {
+    const user = window.auth.getCurrentUser();
+    const onboardingSkipped = sessionStorage.getItem('onboardingSkipped');
+
+    // Show if user exists, has no primary mood, and hasn't skipped this session
+    if (user && !user.primaryMood && !onboardingSkipped) {
+      onboardingModal.style.display = 'flex';
+    }
+  }
+
+  // Show modal if needed
+  showOnboardingModal();
+
+  // Handle Skip
+  skipBtn.addEventListener('click', () => {
+    onboardingModal.style.display = 'none';
+    sessionStorage.setItem('onboardingSkipped', 'true');
+  });
+
+  // Handle Save
+  onboardingForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const saveBtn = document.getElementById('saveOnboarding');
+    const messageEl = document.getElementById('onboarding-message');
+
+    saveBtn.disabled = true;
+    saveBtn.textContent = 'Saving...';
+    messageEl.textContent = '';
+
+    const age = document.getElementById('onboarding-age').value;
+    const gender = document.getElementById('onboarding-gender').value;
+    const primaryMoodEl = document.querySelector('input[name="onboarding-primary-mood"]:checked');
+    const preferencesEls = document.querySelectorAll('input[name="onboarding-preferences"]:checked');
+
+    const profileData = {};
+    if (age) profileData.age = parseInt(age);
+    if (gender) profileData.gender = gender;
+    if (primaryMoodEl) profileData.primaryMood = primaryMoodEl.value;
+    profileData.preferences = Array.from(preferencesEls).map(el => el.value);
+
+    try {
+      const response = await window.apiService.updateProfile(profileData);
+      // The backend should return the updated user object
+      if (response.success && response.user) {
+        // Update user in localStorage and auth state
+        window.auth.saveUser(localStorage.getItem('token'), response.user);
+        onboardingModal.style.display = 'none';
+      }
+    } catch (error) {
+      messageEl.textContent = error.message || 'Failed to save details.';
+    } finally {
+      saveBtn.disabled = false;
+      saveBtn.textContent = 'Save & Continue';
+    }
+  });
+
+</script>
+</body>
+</html>

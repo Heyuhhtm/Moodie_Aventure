@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Profile — DilJourney</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Using styles from account.html and dashboard.html */
+    .profile-page {
+      padding: 120px 5% 80px;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+    }
+    .form-container {
+      position: relative;
+    }
+    .form-message {
+      animation: slideIn 0.3s ease;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 4px;
+      text-align: center;
+    }
+    .form-message.success {
+      background-color: #efe;
+      color: #060;
+      border: 1px solid #cfc;
+    }
+    .form-message.error {
+      background-color: #fee;
+      color: #c00;
+      border: 1px solid #fcc;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* User menu styles from dashboard */
+    .user-menu { position: relative; display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 6px 12px; border-radius: 50px; transition: background 0.2s; }
+    .user-menu:hover { background: rgba(166, 124, 82, 0.1); }
+    .user-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), #c99a71); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #fff; font-size: 0.9rem; }
+    .user-name { font-size: 0.9rem; font-weight: 600; color: var(--text); }
+    .user-dropdown { position: absolute; top: calc(100% + 10px); right: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 8px; min-width: 200px; opacity: 0; pointer-events: none; transform: translateY(-10px); transition: all 0.25s ease; box-shadow: 0 20px 40px rgba(0,0,0,0.1); z-index: 1000; }
+    .user-menu:hover .user-dropdown { opacity: 1; pointer-events: all; transform: translateY(0); }
+    .dropdown-header { padding: 12px 14px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+    .dropdown-header-name { font-weight: 700; font-size: 0.95rem; color: var(--text); }
+    .dropdown-header-email { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+    .dropdown-item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; color: var(--text); text-decoration: none; font-size: 0.9rem; border-radius: 10px; transition: background 0.2s; cursor: pointer; border: none; background: none; width: 100%; text-align: left; }
+    .dropdown-item:hover { background: rgba(166, 124, 82, 0.1); }
+    .dropdown-item.logout { color: #D9534F; }
+    .dropdown-divider { height: 1px; background: var(--border); margin: 8px 0; }
+  </style>
+</head>
+<body>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" id="mobileClose">✕</button>
+  <a href="Explore.html">Explore</a>
+  <a href="dashboard.html">Dashboard</a>
+  <a href="#" id="logout-btn-mobile" style="display:none; margin-top:10px;">Logout</a>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="Explore_Component_Picture/Logo.png" alt="DilJourney Logo" class="nav-logo-img">
+    <span><span class="logo-dil">Dil</span><span class="logo-journey">Journey</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="Explore.html">Explore</a></li>
+    <li>
+      <div class="user-menu" id="userMenu">
+        <div class="user-avatar" id="userAvatar">U</div>
+        <span class="user-name" id="userName">User</span>
+        <div class="user-dropdown">
+          <div class="dropdown-header">
+            <div class="dropdown-header-name" id="dropdownName">User Name</div>
+            <div class="dropdown-header-email" id="dropdownEmail">user@email.com</div>
+          </div>
+          <a href="dashboard.html" class="dropdown-item">🏠 Dashboard</a>
+          <a href="profile.html" class="dropdown-item">👤 My Profile</a>
+          <a href="saved-venues.html" class="dropdown-item">🔖 Saved Places</a>
+          <a href="#" class="dropdown-item">⭐ My Reviews</a>
+          <div class="dropdown-divider"></div>
+          <button class="dropdown-item logout" id="logout-btn">↩ Log Out</button>
+        </div>
+      </div>
+    </li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Profile Form -->
+<main class="profile-page">
+  <div class="form-container" style="max-width: 600px;">
+    <h2 class="form-title">My Profile</h2>
+    <p class="form-sub">Update your personal details and content preferences.</p>
+    <form id="profile-form">
+      <div id="profile-message"></div>
+      <div class="form-group">
+        <label for="profile-name">Full Name</label>
+        <input type="text" id="profile-name" required>
+      </div>
+      <div class="form-group">
+        <label for="profile-email">Email Address</label>
+        <input type="email" id="profile-email" disabled>
+        <small style="color: var(--muted); font-size: 0.8rem; margin-top: 4px; display: block;">Email address cannot be changed.</small>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="profile-age">Age</label>
+          <input type="number" id="profile-age" min="13">
+        </div>
+        <div class="form-group">
+          <label for="profile-gender">Gender</label>
+          <select id="profile-gender">
+            <option value="">Select...</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="non-binary">Non-binary</option>
+            <option value="other">Other</option>
+            <option value="prefer-not-to-say">Prefer not to say</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>Your Primary Mood</label>
+        <div class="choice-group">
+          <input type="radio" id="mood-happy" name="primary-mood" value="happy" class="choice-input">
+          <label for="mood-happy" class="choice-label">😊 Happy</label>
+          <input type="radio" id="mood-sad" name="primary-mood" value="sad" class="choice-input">
+          <label for="mood-sad" class="choice-label">😔 Sad</label>
+          <input type="radio" id="mood-romantic" name="primary-mood" value="romantic" class="choice-input">
+          <label for="mood-romantic" class="choice-label">💕 Romantic</label>
+          <input type="radio" id="mood-motivated" name="primary-mood" value="motivated" class="choice-input">
+          <label for="mood-motivated" class="choice-label">💪 Motivated</label>
+          <input type="radio" id="mood-chill" name="primary-mood" value="chill" class="choice-input">
+          <label for="mood-chill" class="choice-label">🧘 Chill</label>
+          <input type="radio" id="mood-party" name="primary-mood" value="party" class="choice-input">
+          <label for="mood-party" class="choice-label">🎉 Party</label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Content Preferences</label>
+        <div class="choice-group">
+          <input type="checkbox" id="pref-music" name="preferences" value="music" class="choice-input">
+          <label for="pref-music" class="choice-label">🎵 Music</label>
+          <input type="checkbox" id="pref-quotes" name="preferences" value="quotes" class="choice-input">
+          <label for="pref-quotes" class="choice-label">❝ Quotes</label>
+          <input type="checkbox" id="pref-videos" name="preferences" value="videos" class="choice-input">
+          <label for="pref-videos" class="choice-label">🎬 Videos</label>
+          <input type="checkbox" id="pref-activities" name="preferences" value="activities" class="choice-input">
+          <label for="pref-activities" class="choice-label">🤸 Activities</label>
+        </div>
+      </div>
+
+      <button type="submit" id="save-profile-btn" class="btn-primary" style="width:100%; margin-top:20px;">Save Changes</button>
+    </form>
+  </div>
+</main>
+
+<footer class="footer-simple">
+  <div class="footer-inner">
+    <div class="footer-bottom">
+      <p>&copy; 2026 DilJourney. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Scripts -->
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="script.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Protect this page
+    if (!window.auth || !window.auth.isAuthenticated()) {
+      window.location.href = `account.html?form=login&returnUrl=${encodeURIComponent(window.location.pathname)}`;
+      return;
+    }
+    
+    // Populate user menu and form
+    if (window.auth) {
+      window.auth.updateUIForAuthenticatedUser();
+      populateProfileForm();
+    }
+
+    // Handle form submission
+    document.getElementById('profile-form').addEventListener('submit', handleProfileUpdate);
+  });
+
+  function populateProfileForm() {
+    const user = window.auth.getCurrentUser();
+    if (!user) return;
+
+    document.getElementById('profile-name').value = user.name || '';
+    document.getElementById('profile-email').value = user.email || '';
+    document.getElementById('profile-age').value = user.age || '';
+    document.getElementById('profile-gender').value = user.gender || '';
+
+    // Set primary mood
+    if (user.primaryMood) {
+      const moodRadio = document.querySelector(`input[name="primary-mood"][value="${user.primaryMood}"]`);
+      if (moodRadio) {
+        moodRadio.checked = true;
+      }
+    }
+
+    // Set preferences
+    if (user.preferences && user.preferences.length > 0) {
+      user.preferences.forEach(pref => {
+        const prefCheckbox = document.querySelector(`input[name="preferences"][value="${pref}"]`);
+        if (prefCheckbox) {
+          prefCheckbox.checked = true;
+        }
+      });
+    }
+  }
+
+  async function handleProfileUpdate(e) {
+    e.preventDefault();
+    const saveBtn = document.getElementById('save-profile-btn');
+    const messageEl = document.getElementById('profile-message');
+
+    saveBtn.disabled = true;
+    saveBtn.textContent = 'Saving...';
+    messageEl.innerHTML = '';
+
+    // Collect data from form
+    const name = document.getElementById('profile-name').value;
+    const age = document.getElementById('profile-age').value;
+    const gender = document.getElementById('profile-gender').value;
+    const primaryMoodEl = document.querySelector('input[name="primary-mood"]:checked');
+    const preferencesEls = document.querySelectorAll('input[name="preferences"]:checked');
+
+    const profileData = { name };
+    if (age) profileData.age = parseInt(age);
+    if (gender) profileData.gender = gender;
+    if (primaryMoodEl) profileData.primaryMood = primaryMoodEl.value;
+    profileData.preferences = Array.from(preferencesEls).map(el => el.value);
+
+    try {
+      const response = await window.apiService.updateProfile(profileData);
+      if (response.success && response.user) {
+        // Update user in localStorage and auth state
+        window.auth.saveUser(localStorage.getItem('token'), response.user);
+        // Re-populate UI with new data
+        window.auth.updateUIForAuthenticatedUser();
+        showMessage('Profile updated successfully!', 'success');
+      }
+    } catch (error) {
+      showMessage(error.message || 'Failed to update profile.', 'error');
+    } finally {
+      saveBtn.disabled = false;
+      saveBtn.textContent = 'Save Changes';
+    }
+  }
+
+  function showMessage(message, type) {
+    const messageEl = document.getElementById('profile-message');
+    messageEl.innerHTML = `<div class="form-message ${type}">${message}</div>`;
+    // Auto-remove after 5 seconds
+    setTimeout(() => messageEl.innerHTML = '', 5000);
+  }
+</script>
+</body>
+</html>
