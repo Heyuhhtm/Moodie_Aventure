@@ -70,6 +70,7 @@ git push origin main
    - Set environment variables:
      - `MONGO_URI`: Your Atlas connection string
      - `JWT_SECRET`: Generate a secure random string
+     - `CLIENT_URL`: Your frontend's public URL (e.g., `https://diljourney.onrender.com`)
      - `NODE_ENV`: `production`
    - After deploying, note your backend service URL (e.g., `https://diljourney-backend.onrender.com`).
 

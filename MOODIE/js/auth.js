@@ -267,7 +267,15 @@ async function handleLogin(e) {
     
     if (response.success) {
       saveUser(response.token, response.user);
-      showSuccessOverlay('Welcome back!', 'Redirecting to your dashboard...');
+      showSuccessOverlay('Welcome back!', 'Redirecting...');
+
+      // Check for a return URL to redirect back to the intended page
+      const urlParams = new URLSearchParams(window.location.search);
+      const returnUrl = urlParams.get('returnUrl');
+
+      setTimeout(() => {
+        window.location.href = returnUrl || 'dashboard.html';
+      }, 1500);
     }
   } catch (error) {
     console.error('Login error:', error);
