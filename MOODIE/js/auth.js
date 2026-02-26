@@ -156,6 +156,16 @@ async function handleSignup(e) {
   const email = document.getElementById('signup-email')?.value;
   const password = document.getElementById('signup-password')?.value;
   const confirmPassword = document.getElementById('signup-confirm-password')?.value;
+  const age = document.getElementById('signup-age')?.value;
+  const gender = document.getElementById('signup-gender')?.value;
+  
+  // Get selected primary mood
+  const primaryMoodEl = document.querySelector('input[name="primary-mood"]:checked');
+  const primaryMood = primaryMoodEl?.value;
+  
+  // Get selected preferences
+  const preferenceEls = document.querySelectorAll('input[name="preferences"]:checked');
+  const preferences = Array.from(preferenceEls).map(el => el.value);
 
   if (!name || !email || !password || !confirmPassword) {
     showFormMessage('signup-form', 'Please fill in all fields', 'error');
@@ -175,7 +185,16 @@ async function handleSignup(e) {
   try {
     setFormLoading('signup-form', true);
     
-    const response = await window.apiService.register({ name, email, password });
+    // Build user data object with all fields
+    const userData = { name, email, password };
+    
+    // Add optional fields if provided
+    if (age) userData.age = parseInt(age);
+    if (gender) userData.gender = gender;
+    if (primaryMood) userData.primaryMood = primaryMood;
+    if (preferences.length > 0) userData.preferences = preferences;
+    
+    const response = await window.apiService.register(userData);
     
     if (response.success) {
       saveUser(response.token, response.user);

@@ -46,7 +46,22 @@ const userSchema = new mongoose.Schema(
     // User's preferred moods
     favoriteMoods: {
       type: [String],
-      enum: ['family', 'foodie', 'romantic', 'nature', 'lonely', 'club'],
+      enum: ['family', 'foodie', 'romantic', 'nature', 'lonely', 'club', 'happy', 'sad', 'motivated', 'chill', 'party'],
+      default: [],
+    },
+    age: {
+      type: Number,
+      min: [13, 'You must be at least 13 years old'],
+      max: [120, 'Please enter a valid age'],
+    },
+    gender: {
+      type: String,
+      enum: ['male', 'female', 'non-binary', 'other', 'prefer-not-to-say', ''],
+      default: '',
+    },
+    preferences: {
+      type: [String],
+      enum: ['music', 'quotes', 'videos', 'activities'],
       default: [],
     },
   },

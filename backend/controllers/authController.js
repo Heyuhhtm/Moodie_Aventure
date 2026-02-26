@@ -23,6 +23,9 @@ const sendTokenResponse = (user, statusCode, res) => {
       avatar:        user.avatar,
       bio:           user.bio,
       city:          user.city,
+      age:           user.age,
+      gender:        user.gender,
+      preferences:   user.preferences,
       favoriteMoods: user.favoriteMoods,
       savedVenues:   user.savedVenues,
       createdAt:     user.createdAt,
@@ -45,7 +48,7 @@ exports.register = async (req, res) => {
     });
   }
 
-  const { name, email, password } = req.body;
+  const { name, email, password, age, gender, primaryMood, preferences } = req.body;
 
   try {
     // Check if user already exists
@@ -57,8 +60,17 @@ exports.register = async (req, res) => {
       });
     }
 
+    // Build user data object
+    const userData = { name, email, password };
+    
+    // Add optional fields if provided
+    if (age) userData.age = age;
+    if (gender) userData.gender = gender;
+    if (primaryMood) userData.favoriteMoods = [primaryMood];
+    if (preferences && Array.isArray(preferences)) userData.preferences = preferences;
+
     // Create user
-    const user = await User.create({ name, email, password });
+    const user = await User.create(userData);
     sendTokenResponse(user, 201, res);
   } catch (error) {
     console.error('Register error:', error);
