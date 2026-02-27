@@ -75,6 +75,11 @@ class ApiService {
       }
 
       if (!response.ok) {
+        if (response.status === 401) {
+          this.removeToken();
+          localStorage.removeItem('user');
+          if (window.showToast) window.showToast('Session expired. Please log in again.', 'error');
+        }
         throw new Error(data.message || 'Something went wrong');
       }
 
@@ -82,6 +87,11 @@ class ApiService {
     } catch (error) {
       // Only log detailed errors in development
       if (IS_DEVELOPMENT) console.error('API Error:', error);
+
+      // Don't show toast for initial 401 on restricted pages if not user-initiated
+      if (window.showToast && !error.message.includes('No token')) {
+        window.showToast(error.message || 'Network Error', 'error');
+      }
       throw error;
     }
   }

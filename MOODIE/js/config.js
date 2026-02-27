@@ -4,9 +4,8 @@
  */
 
 window.APP_CONFIG = {
-  // Change this to your production backend URL after deployment
-  // Example: 'https://your-backend.onrender.com'
-  // Leave this as an empty string for local development. The api.js script will default to 'http://localhost:5000'.
-  // IMPORTANT: Replace this with your actual Render backend URL
-  apiUrl: 'https://diljourney-backend.onrender.com'
+  // Automatically determine if we're on localhost or a deployed environment
+  apiUrl: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:5000'
+    : 'https://diljourney-backend.onrender.com'
 };

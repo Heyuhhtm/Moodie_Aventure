@@ -1,7 +1,7 @@
 // Utility function for throttling
 function throttle(func, limit) {
   let inThrottle;
-  return function(...args) {
+  return function (...args) {
     if (!inThrottle) {
       func.apply(this, args);
       inThrottle = true;
@@ -13,7 +13,7 @@ function throttle(func, limit) {
 // Image lazy loading with smooth fade-in and skeleton handling
 document.addEventListener('DOMContentLoaded', () => {
   const images = document.querySelectorAll('.mood-card img');
-  
+
   // Function to handle image load completion
   const handleImageLoad = (img) => {
     img.classList.add('loaded');
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   };
-  
+
   images.forEach(img => {
     // If image is already loaded (from cache)
     if (img.complete && img.naturalWidth !== 0) {
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
       img.addEventListener('error', () => handleImageLoad(img));
     }
   });
-  
+
   // IntersectionObserver for images - preload before they come into viewport
   if ('IntersectionObserver' in window) {
     const imageObserver = new IntersectionObserver((entries, observer) => {
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
       rootMargin: '100px 0px', // Start loading 100px before visible
       threshold: 0
     });
-    
+
     images.forEach(img => imageObserver.observe(img));
   }
 });
@@ -67,13 +67,13 @@ document.addEventListener('DOMContentLoaded', () => {
 const reveals = document.querySelectorAll('.reveal');
 if (reveals.length > 0) {
   const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => { 
-      if (e.isIntersecting) { 
-        e.target.classList.add('visible'); 
-        obs.unobserve(e.target); 
-      } 
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        obs.unobserve(e.target);
+      }
     });
-  }, { 
+  }, {
     threshold: 0.12,
     rootMargin: '0px 0px 50px 0px' // Start loading 50px before element is visible
   });
@@ -101,7 +101,7 @@ setupMobileMenu();
 
 // Mood pill selection - Only on index page
 document.querySelectorAll('.mood-pill').forEach(pill => {
-  pill.addEventListener('click', function() {
+  pill.addEventListener('click', function () {
     document.querySelectorAll('.mood-pill').forEach(p => p.style.outline = '');
     const activeColor = getComputedStyle(this).color;
     this.style.outline = `2px solid ${activeColor}`;
@@ -127,7 +127,7 @@ if (nav) {
     }
     lastScroll = current <= 0 ? 0 : current;
   }, 100);
-  
+
   window.addEventListener('scroll', handleScroll, { passive: true });
   nav.style.transition = 'transform 0.35s ease';
 }
@@ -140,12 +140,12 @@ const contactForm = document.getElementById('contact-form');
 
 if (contactForm) {
   const statusDiv = document.getElementById('contact-form-status');
-  
+
   // Check if emailjs is loaded
   if (typeof emailjs !== 'undefined') {
     emailjs.init('XK5pYs1BHTtUTzA5R');
 
-    contactForm.addEventListener('submit', function(event) {
+    contactForm.addEventListener('submit', function (event) {
       event.preventDefault();
 
       const submitBtn = contactForm.querySelector('button[type="submit"]');
@@ -190,4 +190,31 @@ if (contactForm) {
 window.dilJourneyUtils = {
   throttle,
   setupMobileMenu
+};
+
+// Toast Notification System
+window.showToast = function (message, type = 'info') {
+  let container = document.getElementById('toast-container');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'toast-container';
+    document.body.appendChild(container);
+  }
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+
+  // Icon based on type
+  const icon = type === 'error' ? '❌ ' : type === 'success' ? '✅ ' : 'ℹ️ ';
+  toast.innerText = icon + message;
+
+  container.appendChild(toast);
+
+  // Trigger reflow for animation
+  void toast.offsetWidth;
+  toast.classList.add('show');
+
+  setTimeout(() => {
+    toast.classList.remove('show');
+    toast.addEventListener('transitionend', () => toast.remove());
+  }, 3500);
 };
